@@ -31,7 +31,7 @@ class GroupsListState extends State<GroupsList> {
   );
 
   Color _generateRandomColor() {
-    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt());
+    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
   }
 
   void _addNewGroup(String name) {
