@@ -1,30 +1,25 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:minha_van/main.dart';
+import 'package:minha_van/i18n/main_i18n.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Initial Options screen test', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: Options()));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that main buttons are present
+    expect(find.text(MainI18n.I_AM_A_DRIVER), findsOneWidget);
+    expect(find.text(MainI18n.I_AM_A_PASSENGER), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Test navigation to driver screen
+    await tester.tap(find.text(MainI18n.I_AM_A_DRIVER));
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Test navigation to passenger screen
+    await tester.tap(find.text(MainI18n.I_AM_A_PASSENGER));
+    await tester.pumpAndSettle();
+
+    // Test about app text is present
+    expect(find.text('Sobre o app'), findsOneWidget);
   });
 }
