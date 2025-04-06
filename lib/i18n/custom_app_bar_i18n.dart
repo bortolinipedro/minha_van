@@ -1,4 +1,4 @@
 class CustomAppBarI18n {
-  static const String MINHA = "Minha";
-  static const String VAN = "Van";
+  static const String minha = "Minha";
+  static const String van = "Van";
 }

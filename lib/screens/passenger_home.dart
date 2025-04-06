@@ -8,11 +8,13 @@ import 'package:minha_van/screens/schedules.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
 
 class PassangerHome extends StatefulWidget {
+  const PassangerHome({super.key});
+
   @override
-  _PassangerHomeState createState() => _PassangerHomeState();
+  State<PassangerHome> createState() => PassangerHomeState();
 }
 
-class _PassangerHomeState extends State<PassangerHome> {
+class PassangerHomeState extends State<PassangerHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,15 +27,15 @@ class _PassangerHomeState extends State<PassangerHome> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(PassengerHomeI18n.HELLO_PEDRO, style: AppTextStyles.heading),
+            Text(PassengerHomeI18n.helloPedro, style: AppTextStyles.heading),
             SizedBox(height: AppSpacing.sm),
             Text(
-              PassengerHomeI18n.INDICATE_ABSENCES_AND_CHANGE_SCHEDULES,
+              PassengerHomeI18n.indicateAbsencesAndChangeSchedules,
               style: AppTextStyles.subHeading,
             ),
             SizedBox(height: AppSpacing.sm),
             CustomButton(
-              text: PassengerHomeI18n.MY_SCHEDULES,
+              text: PassengerHomeI18n.mySchedules,
               color: AppColors.secondary,
               onPressed: () {
                 Navigator.push(
@@ -46,7 +48,7 @@ class _PassangerHomeState extends State<PassangerHome> {
             ),
             SizedBox(height: AppSpacing.sm),
             CustomButton(
-              text: PassengerHomeI18n.MY_PROFILE,
+              text: PassengerHomeI18n.myProfile,
               color: AppColors.secondary,
               onPressed: () {},
               width: double.infinity,
@@ -54,32 +56,32 @@ class _PassangerHomeState extends State<PassangerHome> {
             ),
             SizedBox(height: AppSpacing.sm),
             Text(
-              PassengerHomeI18n.YOUR_DEPARTURE_IS_CONFIRMED,
+              PassengerHomeI18n.yourDepartureIsConfirmed,
               style: AppTextStyles.heading,
             ),
             Text(
-              PassengerHomeI18n.INDICATE_IF_NOT_GOING_TODAY,
+              PassengerHomeI18n.indicateIfNotGoingToday,
               style: AppTextStyles.subHeading,
             ),
             SizedBox(height: AppSpacing.sm),
             CustomButton(
-              text: PassengerHomeI18n.NOT_GOING_TODAY,
+              text: PassengerHomeI18n.notGoingToday,
               color: AppColors.primary,
               onPressed: () {},
               width: double.infinity,
             ),
             SizedBox(height: AppSpacing.sm),
             Text(
-              PassengerHomeI18n.YOUR_RETURN_IS_CONFIRMED,
+              PassengerHomeI18n.yourReturnIsConfirmed,
               style: AppTextStyles.heading,
             ),
             Text(
-              PassengerHomeI18n.INDICATE_IF_NOT_RETURNING_TODAY,
+              PassengerHomeI18n.indicateIfNotReturningToday,
               style: AppTextStyles.subHeading,
             ),
             SizedBox(height: AppSpacing.sm),
             CustomButton(
-              text: PassengerHomeI18n.NOT_RETURNING_TODAY,
+              text: PassengerHomeI18n.notReturningToday,
               color: AppColors.primary,
               onPressed: () {},
               width: double.infinity,

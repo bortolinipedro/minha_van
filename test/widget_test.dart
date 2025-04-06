@@ -8,15 +8,15 @@ void main() {
     await tester.pumpWidget(MaterialApp(home: Options()));
 
     // Verify that main buttons are present
-    expect(find.text(MainI18n.I_AM_A_DRIVER), findsOneWidget);
-    expect(find.text(MainI18n.I_AM_A_PASSENGER), findsOneWidget);
+    expect(find.text(MainI18n.iAmADriver), findsOneWidget);
+    expect(find.text(MainI18n.iAmAPassenger), findsOneWidget);
 
     // Test navigation to driver screen
-    await tester.tap(find.text(MainI18n.I_AM_A_DRIVER));
+    await tester.tap(find.text(MainI18n.iAmADriver));
     await tester.pumpAndSettle();
 
     // Test navigation to passenger screen
-    await tester.tap(find.text(MainI18n.I_AM_A_PASSENGER));
+    await tester.tap(find.text(MainI18n.iAmAPassenger));
     await tester.pumpAndSettle();
 
     // Test about app text is present

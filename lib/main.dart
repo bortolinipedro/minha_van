@@ -12,7 +12,7 @@ import 'package:minha_van/widgets/custom_app_bar.dart';
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: Options(),
+    home: const Options(),
     routes: {
       "/driver": (context) => GroupsList(),
       "/passanger": (context) => PassangerHome(),
@@ -21,6 +21,8 @@ void main() {
 }
 
 class Options extends StatelessWidget {
+  const Options({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +40,7 @@ class Options extends StatelessWidget {
               children: [
                 SizedBox(height: AppSpacing.md),
                 CustomButton(
-                  text: MainI18n.I_AM_A_DRIVER,
+                  text: MainI18n.iAmADriver,
                   color: AppColors.secondary,
                   onPressed: () {
                     Navigator.pushNamed(context, "/driver");
@@ -49,7 +51,7 @@ class Options extends StatelessWidget {
                 ),
                 SizedBox(height: AppSpacing.md),
                 CustomButton(
-                  text: MainI18n.I_AM_A_PASSENGER,
+                  text: MainI18n.iAmAPassenger,
                   color: AppColors.primary,
                   onPressed: () {
                     Navigator.pushNamed(context, "/passanger");

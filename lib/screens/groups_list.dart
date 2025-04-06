@@ -12,10 +12,10 @@ class GroupsList extends StatefulWidget {
   const GroupsList({super.key});
 
   @override
-  State<GroupsList> createState() => _GroupsListState();
+  State<GroupsList> createState() => GroupsListState();
 }
 
-class _GroupsListState extends State<GroupsList> {
+class GroupsListState extends State<GroupsList> {
   final List<Map<String, dynamic>> grupos = [
     {'name': 'Grupo da Manhã', 'color': const Color(0xFF8E97FD)},
     {'name': 'Grupo da Tarde', 'color': const Color(0xFFFA6E5A)},
@@ -31,7 +31,7 @@ class _GroupsListState extends State<GroupsList> {
   );
 
   Color _generateRandomColor() {
-    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt());
   }
 
   void _addNewGroup(String name) {
@@ -49,17 +49,17 @@ class _GroupsListState extends State<GroupsList> {
       builder: (context) {
         String novoGrupo = '';
         return AlertDialog(
-          title: const Text(GroupsListI18n.NEW_GROUP),
+          title: const Text(GroupsListI18n.newGroup),
           content: TextField(
             onChanged: (value) => novoGrupo = value,
             decoration: const InputDecoration(
-              hintText: GroupsListI18n.GROUP_NAME,
+              hintText: GroupsListI18n.groupName,
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(GroupsListI18n.CANCEL),
+              child: const Text(GroupsListI18n.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -68,7 +68,7 @@ class _GroupsListState extends State<GroupsList> {
                   Navigator.pop(context);
                 }
               },
-              child: const Text(GroupsListI18n.ADD),
+              child: const Text(GroupsListI18n.add),
             ),
           ],
         );
@@ -90,12 +90,12 @@ class _GroupsListState extends State<GroupsList> {
           children: [
             CustomButton(
               onPressed: _showAddGroupDialog,
-              text: GroupsListI18n.ADD_GROUP,
+              text: GroupsListI18n.addGroup,
               color: AppColors.primary,
               width: double.infinity,
             ),
             SizedBox(height: AppSpacing.md),
-            Text(GroupsListI18n.CHOOSE_GROUP, style: AppTextStyles.subHeading),
+            Text(GroupsListI18n.chooseGroup, style: AppTextStyles.subHeading),
             SizedBox(height: AppSpacing.sm),
             Expanded(
               child: GridView.builder(

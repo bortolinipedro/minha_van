@@ -7,11 +7,13 @@ import 'package:minha_van/i18n/driver_home_i18n.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
 
 class DriverHome extends StatefulWidget {
+  const DriverHome({super.key});
+
   @override
-  _DriverHomeState createState() => _DriverHomeState();
+  State<DriverHome> createState() => DriverHomeState();
 }
 
-class _DriverHomeState extends State<DriverHome> {
+class DriverHomeState extends State<DriverHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,17 +27,17 @@ class _DriverHomeState extends State<DriverHome> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              DriverHomeI18n.WELCOME_DRIVER,
+              DriverHomeI18n.welcomeDriver,
               style: AppTextStyles.heading,
             ),
             SizedBox(height: AppSpacing.sm),
             Text(
-              DriverHomeI18n.MANAGE_VAN_AND_PASSENGERS,
+              DriverHomeI18n.manageVanAndPassengers,
               style: AppTextStyles.subHeading,
             ),
             SizedBox(height: AppSpacing.sm),
             CustomButton(
-              text: DriverHomeI18n.BACK_TO_HOME_SCREEN,
+              text: DriverHomeI18n.backToHomeScreen,
               color: AppColors.secondary,
               onPressed: () {
                 Navigator.pushNamed(context, "/");

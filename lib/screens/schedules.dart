@@ -7,11 +7,13 @@ import 'package:minha_van/widgets/custom_button.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
 
 class Schedules extends StatefulWidget {
+  const Schedules({super.key});
+
   @override
-  _SchedulesState createState() => _SchedulesState();
+  State<Schedules> createState() => SchedulesState();
 }
 
-class _SchedulesState extends State<Schedules> {
+class SchedulesState extends State<Schedules> {
   List<bool> goingDays = List.filled(7, false);
   List<bool> returnDays = List.filled(7, false);
 
@@ -19,7 +21,7 @@ class _SchedulesState extends State<Schedules> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: CustomButton(
-        text: SchedulesI18n.WEEK_DAYS[index],
+        text: SchedulesI18n.weekDays[index],
         color: isSelected ? AppColors.secondary : AppColors.auxiliar,
         textColor: isSelected ? AppColors.white : AppColors.textPrimary,
         onPressed: () => onChanged(!isSelected),
@@ -40,10 +42,10 @@ class _SchedulesState extends State<Schedules> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(SchedulesI18n.GOING_DAYS, style: AppTextStyles.heading),
+            Text(SchedulesI18n.goingDays, style: AppTextStyles.heading),
             SizedBox(height: AppSpacing.sm),
             Text(
-              SchedulesI18n.SELECT_GOING_DAYS,
+              SchedulesI18n.selectGoingDays,
               style: AppTextStyles.subHeading,
             ),
             SizedBox(height: AppSpacing.sm),
@@ -58,10 +60,10 @@ class _SchedulesState extends State<Schedules> {
 
             SizedBox(height: AppSpacing.sm),
 
-            Text(SchedulesI18n.RETURN_DAYS, style: AppTextStyles.heading),
+            Text(SchedulesI18n.returnDays, style: AppTextStyles.heading),
             SizedBox(height: AppSpacing.sm),
             Text(
-              SchedulesI18n.SELECT_RETURN_DAYS,
+              SchedulesI18n.selectReturnDays,
               style: AppTextStyles.subHeading,
             ),
             SizedBox(height: AppSpacing.sm),
@@ -77,7 +79,7 @@ class _SchedulesState extends State<Schedules> {
             SizedBox(height: AppSpacing.sm),
 
             CustomButton(
-              text: SchedulesI18n.SAVE,
+              text: SchedulesI18n.save,
               color: AppColors.primary,
               onPressed: () => Navigator.pop(context),
               width: double.infinity,

@@ -1,11 +1,10 @@
 class SchedulesI18n {
-  static const String GOING_DAYS = "Dias da semana em que eu vou com a Van";
-  static const String SELECT_GOING_DAYS = "Selecione os dias da semana em que você usará a van para ir";
-  static const String RETURN_DAYS = "Volto com a Van";
-  static const String SELECT_RETURN_DAYS = "Selecione os dias da semana em que você usará a van para voltar";
-  static const String SAVE = "Salvar";
-  
-  static const List<String> WEEK_DAYS = [
+  static const String goingDays = "Dias que vou";
+  static const String selectGoingDays = "Selecione os dias que você vai";
+  static const String returnDays = "Dias que volto";
+  static const String selectReturnDays = "Selecione os dias que você volta";
+  static const String save = "Salvar";
+  static const List<String> weekDays = [
     "Segunda",
     "Terça",
     "Quarta",

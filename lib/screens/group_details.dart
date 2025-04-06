@@ -24,8 +24,8 @@ class _GroupDetailsState extends State<GroupDetails>
   late final TabController _tabController;
 
   static const _tabs = [
-    Tab(text: GroupDetailsI18n.GOING_TODAY),
-    Tab(text: GroupDetailsI18n.RETURNING_TODAY),
+    Tab(text: GroupDetailsI18n.goingToday),
+    Tab(text: GroupDetailsI18n.returningToday),
   ];
 
   final List<Map<String, String>> passengersThatGo = [
@@ -110,7 +110,7 @@ class _GroupDetailsState extends State<GroupDetails>
           child: ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: AppSpacing.sm),
             title: Text(
-              passengers['name']! + ' | ' + passengers['adress']!,
+              "${passengers['name']} | ${passengers['adress']}",
               style: AppTextStyles.listHeading,
             ),
             subtitle: Column(

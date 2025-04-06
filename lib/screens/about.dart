@@ -20,37 +20,37 @@ class About extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(AboutI18n.MEMBERS, style: AppTextStyles.heading),
+            Text(AboutI18n.members, style: AppTextStyles.heading),
             SizedBox(height: AppSpacing.sm),
             Text(
-              AboutI18n.MEMBERS_LIST, 
+              AboutI18n.membersList, 
               style: AppTextStyles.subHeading,
               textAlign: TextAlign.justify,
             ),
             
             SizedBox(height: AppSpacing.sm),
-            Text(AboutI18n.OBJECTIVE, style: AppTextStyles.heading),
+            Text(AboutI18n.objective, style: AppTextStyles.heading),
             SizedBox(height: AppSpacing.sm),
             Text(
-              AboutI18n.OBJECTIVE_TEXT, 
+              AboutI18n.objectiveText, 
               style: AppTextStyles.subHeading,
               textAlign: TextAlign.justify,
             ),
             
             SizedBox(height: AppSpacing.sm),
-            Text(AboutI18n.TARGET_AUDIENCE, style: AppTextStyles.heading),
+            Text(AboutI18n.targetAudience, style: AppTextStyles.heading),
             SizedBox(height: AppSpacing.sm),
             Text(
-              AboutI18n.TARGET_AUDIENCE_LIST, 
+              AboutI18n.targetAudienceList, 
               style: AppTextStyles.subHeading,
               textAlign: TextAlign.justify,
             ),
             
             SizedBox(height: AppSpacing.sm),
-            Text(AboutI18n.MAIN_FEATURES, style: AppTextStyles.heading),
+            Text(AboutI18n.mainFeatures, style: AppTextStyles.heading),
             SizedBox(height: AppSpacing.sm),
             Text(
-              AboutI18n.FEATURES_LIST, 
+              AboutI18n.featuresList, 
               style: AppTextStyles.subHeading,
               textAlign: TextAlign.justify,
             ),

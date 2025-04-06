@@ -22,7 +22,7 @@ class CustomButton extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
     Color? textColor,
     this.fontSize = 18,
-  }) : this.textColor = textColor ?? Colors.white;
+  }) : textColor = textColor ?? Colors.white;
 
   @override
   Widget build(BuildContext context) {

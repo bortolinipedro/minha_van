@@ -9,11 +9,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     this.showBackButton = true,
     this.showBusIcon = false,
     this.actions,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +31,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(CustomAppBarI18n.MINHA + " ", style: AppTextStyles.title),
+          Text("${CustomAppBarI18n.minha} ", style: AppTextStyles.title),
           if (showBusIcon) Image.asset(
             'assets/images/bus.png',
             height: 24,
           ),
-          Text(" " + CustomAppBarI18n.VAN, style: AppTextStyles.title),
+          Text(" ${CustomAppBarI18n.van}", style: AppTextStyles.title),
         ],
       ),
       actions: actions ?? [SizedBox(width: 48)],
