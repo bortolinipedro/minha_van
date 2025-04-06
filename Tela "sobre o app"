@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.white,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    // Ação do botão para ser implementada depois
+                  },
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  "Minha Van",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              "Membros",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "Bruno\nbrunocstc@gmail.com\nEron\neronarthu25@gmail.com\nPedro\nbortolinipedro12@gmail.com", 
+              style: TextStyle(fontSize: 14, color: Colors.black),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              "Objetivo",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "O aplicativo tem como objetivo facilitar a organização diária de motoristas autônomos de vans, permitindo que eles saibam quais passageiros irão utilizar o transporte em um determinado dia e quais os locais de embarque. Além disso, o sistema permite que os motoristas organizem grupos distintos de passageiros, como turnos da manhã e da noite.",
+              textAlign: TextAlign.justify,
+              style: TextStyle(fontSize: 14, color: Colors.black),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              "Público-alvo",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "- Motoristas autônomos de vans\n- Passageiros estudantes",
+              textAlign: TextAlign.justify,
+              style: TextStyle(fontSize: 14, color: Colors.black),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              "Principais funcionalidades",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "- Cadastro de motoristas\n- Cadastro de passageiros via link de grupo\n- Login para passageiros e motoristas\n- Lista de passageiros disponível para o motorista, com nome, telefone e endereço\n- Indicação dos dias em que o passageiro costuma utilizar o transporte\n- Confirmação diária do passageiro informando se usará o transporte no dia atual\n- Cadastro de diferentes grupos de passageiros (manhã, noite, etc.)",
+              textAlign: TextAlign.justify,
+              style: TextStyle(fontSize: 14, color: Colors.black),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Minha Van',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      home: const MyHomePage(title: 'Minha Van'),
+    );
+  }
+}
