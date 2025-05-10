@@ -19,9 +19,7 @@ class PassangerHomeState extends State<PassangerHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        showBusIcon: true,
-      ),
+      appBar: CustomAppBar(showBusIcon: true),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
         child: Column(
@@ -50,7 +48,9 @@ class PassangerHomeState extends State<PassangerHome> {
             CustomButton(
               text: PassengerHomeI18n.myProfile,
               color: AppColors.secondary,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/profile');
+              },
               width: double.infinity,
               borderRadius: 10,
             ),
