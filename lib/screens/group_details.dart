@@ -4,6 +4,7 @@ import 'package:minha_van/constants/spacing.dart';
 import 'package:minha_van/constants/text_styles.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
 import 'package:minha_van/i18n/group_details_i18n.dart';
+import 'package:minha_van/helpers/sql_helper.dart';
 
 class GroupDetails extends StatefulWidget {
   final String groupName;
@@ -22,47 +23,29 @@ class GroupDetails extends StatefulWidget {
 class _GroupDetailsState extends State<GroupDetails>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
+  List<Map<String, dynamic>> passengersThatGo = [];
+  List<Map<String, dynamic>> passengersThatComeBack = [];
 
   static const _tabs = [
     Tab(text: GroupDetailsI18n.goingToday),
     Tab(text: GroupDetailsI18n.returningToday),
   ];
 
-  final List<Map<String, String>> passengersThatGo = [
-    {
-      'name': 'Maria',
-      'adress': 'Av. Barbacena - Barro Preto',
-      'telephone': '(31) 9 1111-1111',
-    },
-    {
-      'name': 'Pedro',
-      'adress': 'Av. Rio Grande do Norte - Savassi',
-      'telephone': '(31) 9 1111-1111',
-    },
-    {
-      'name': 'João Antônio',
-      'adress': 'R. Santa Rita Durão - Funcionários',
-      'telephone': '(31) 9 1111-1111',
-    },
-  ];
-
-  final List<Map<String, String>> passengersThatComeBack = [
-    {
-      'name': 'Pedro',
-      'adress': 'Av. Rio Grande do Norte - Savassi',
-      'telephone': '(31) 9 1111-1111',
-    },
-    {
-      'name': 'Maria',
-      'adress': 'Av. Barbacena - Barro Preto',
-      'telephone': '(31) 9 1111-1111',
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabs.length, vsync: this);
+    _loadPassengers();
+  }
+
+  Future<void> _loadPassengers() async {
+    final goingPassengers = await SQLHelper.getPassengers(1, true);
+    final returningPassengers = await SQLHelper.getPassengers(1, false);
+    
+    setState(() {
+      passengersThatGo = goingPassengers;
+      passengersThatComeBack = returningPassengers;
+    });
   }
 
   @override
@@ -99,18 +82,20 @@ class _GroupDetailsState extends State<GroupDetails>
     );
   }
 
-  Widget _buildpassengersList(List<Map<String, String>> passengersArg) {
+  Widget _buildpassengersList(List<Map<String, dynamic>> passengersArg) {
     return ListView.separated(
       itemCount: passengersArg.length,
       separatorBuilder: (_, __) => const Divider(height: 1),
       itemBuilder: (context, index) {
-        final passengers = passengersArg[index];
+        final passenger = passengersArg[index];
+        final address = "${passenger['street']} - ${passenger['neighborhood']}";
+        
         return Padding(
           padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
           child: ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: AppSpacing.sm),
             title: Text(
-              "${passengers['name']} | ${passengers['adress']}",
+              "${passenger['name']} | $address",
               style: AppTextStyles.listHeading,
             ),
             subtitle: Column(
@@ -118,7 +103,7 @@ class _GroupDetailsState extends State<GroupDetails>
               children: [
                 SizedBox(height: 2),
                 Text(
-                  passengers['telephone']!,
+                  passenger['phone_number'],
                   style: AppTextStyles.listSubheading,
                 ),
               ],
