@@ -7,11 +7,13 @@ import 'package:minha_van/i18n/group_details_i18n.dart';
 import 'package:minha_van/helpers/sql_helper.dart';
 
 class GroupDetails extends StatefulWidget {
+  final int groupId;
   final String groupName;
   final Color groupColor;
 
   const GroupDetails({
     super.key,
+    required this.groupId,
     required this.groupName,
     required this.groupColor,
   });

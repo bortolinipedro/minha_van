@@ -7,6 +7,7 @@ import 'package:minha_van/widgets/custom_app_bar.dart';
 import 'package:minha_van/screens/group_details.dart';
 import 'package:minha_van/widgets/custom_button.dart';
 import 'dart:math' as math;
+import 'package:minha_van/helpers/sql_helper.dart';
 
 class GroupsList extends StatefulWidget {
   const GroupsList({super.key});
@@ -16,12 +17,20 @@ class GroupsList extends StatefulWidget {
 }
 
 class GroupsListState extends State<GroupsList> {
-  final List<Map<String, dynamic>> grupos = [
-    {'name': 'Grupo da Manhã', 'color': const Color(0xFF8E97FD)},
-    {'name': 'Grupo da Tarde', 'color': const Color(0xFFFA6E5A)},
-    {'name': 'Grupo da Noite PUC', 'color': const Color(0xFF515763)},
-    {'name': 'Grupo Sábado Natação', 'color': const Color(0xFF7EB1BF)},
-  ];
+  List<Map<String, dynamic>> grupos = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshGroups();
+  }
+
+  Future<void> _refreshGroups() async {
+    final data = await SQLHelper.getGroups();
+    setState(() {
+      grupos = data;
+    });
+  }
 
   static const _gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
     crossAxisCount: 2,
@@ -31,16 +40,15 @@ class GroupsListState extends State<GroupsList> {
   );
 
   Color _generateRandomColor() {
-    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+    return Color(
+      (math.Random().nextDouble() * 0xFFFFFF).toInt(),
+    ).withOpacity(1.0);
   }
 
-  void _addNewGroup(String name) {
-    setState(() {
-      grupos.add({
-        'name': name,
-        'color': _generateRandomColor(),
-      });
-    });
+  void _addNewGroup(String name) async {
+    final colorValue = _generateRandomColor().value;
+    await SQLHelper.createGroup(name, colorValue);
+    _refreshGroups();
   }
 
   void _showAddGroupDialog() {
@@ -80,9 +88,7 @@ class GroupsListState extends State<GroupsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBar(
-        showBusIcon: true,
-      ),
+      appBar: CustomAppBar(showBusIcon: true),
       body: Padding(
         padding: EdgeInsets.all(AppSpacing.sm),
         child: Column(
@@ -116,7 +122,7 @@ class GroupsListState extends State<GroupsList> {
       child: Container(
         padding: EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
-          color: grupos[index]['color'],
+          color: Color(grupos[index]['color']),
           borderRadius: BorderRadius.circular(AppSpacing.sm),
         ),
         child: Center(
@@ -134,10 +140,12 @@ class GroupsListState extends State<GroupsList> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => GroupDetails(
-          groupName: grupos[index]['name'],
-          groupColor: grupos[index]['color'],
-        ),
+        builder:
+            (context) => GroupDetails(
+              groupId: grupos[index]['id'],
+              groupName: grupos[index]['name'],
+              groupColor: Color(grupos[index]['color']),
+            ),
       ),
     );
   }
