@@ -25,6 +25,16 @@ class SQLHelper {
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
     """);
+
+    await database.execute("""
+      CREATE TABLE IF NOT EXISTS schedules(
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        day INTEGER NOT NULL,
+        shift INTEGER NOT NULL,
+        active INTEGER NOT NULL DEFAULT 0,
+        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )
+    """);
   }
 
   static Future<sql.Database> db() async {
@@ -86,5 +96,43 @@ class SQLHelper {
   static Future<void> deleteGroup(int id) async {
     final db = await SQLHelper.db();
     await db.delete("groups", where: "id = ?", whereArgs: [id]);
+  }
+
+  static Future<List<Map<String, dynamic>>> getSchedules(int shift) async {
+    final db = await SQLHelper.db();
+    return db.query(
+      'schedules',
+      where: 'shift = ?',
+      whereArgs: [shift],
+      orderBy: 'day ASC',
+    );
+  }
+
+  static Future<void> updateSchedule(int day, int shift, bool active) async {
+    final db = await SQLHelper.db();
+    
+    // Check if schedule exists
+    final List<Map<String, dynamic>> existing = await db.query(
+      'schedules',
+      where: 'day = ? AND shift = ?',
+      whereArgs: [day, shift],
+    );
+
+    if (existing.isEmpty) {
+      // Insert new schedule
+      await db.insert('schedules', {
+        'day': day,
+        'shift': shift,
+        'active': active ? 1 : 0,
+      });
+    } else {
+      // Update existing schedule
+      await db.update(
+        'schedules',
+        {'active': active ? 1 : 0},
+        where: 'day = ? AND shift = ?',
+        whereArgs: [day, shift],
+      );
+    }
   }
 }
