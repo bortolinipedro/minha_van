@@ -2,8 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SQLHelper {
-  static Future<void> createTable(sql.Database database) async {
-    await database.execute("""CREATE TABLE passangers_list(
+  static Future<void> createTables(sql.Database database) async {
+    await database.execute("""
+      CREATE TABLE IF NOT EXISTS passangers_list (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         name TEXT,
         street TEXT,
@@ -13,12 +14,9 @@ class SQLHelper {
         going INTEGER NOT NULL
       )
     """);
-  }
 
-  static Future<void> createTables(sql.Database database) async {
-    await createTable(database);
     await database.execute("""
-      CREATE TABLE IF NOT EXISTS groups(
+      CREATE TABLE IF NOT EXISTS groups (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         name TEXT,
         color INTEGER,
@@ -27,7 +25,7 @@ class SQLHelper {
     """);
 
     await database.execute("""
-      CREATE TABLE IF NOT EXISTS schedules(
+      CREATE TABLE IF NOT EXISTS schedules (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         day INTEGER NOT NULL,
         shift INTEGER NOT NULL,
