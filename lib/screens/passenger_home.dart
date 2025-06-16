@@ -15,6 +15,28 @@ class PassangerHome extends StatefulWidget {
 }
 
 class PassangerHomeState extends State<PassangerHome> {
+  int _selectedIndex = 1;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if (index == 0) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Schedules()),
+      );
+      setState(() {
+        _selectedIndex = 1;
+      });
+    } else if (index == 2) {
+      setState(() {
+        _selectedIndex = 1;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,34 +49,7 @@ class PassangerHomeState extends State<PassangerHome> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(PassengerHomeI18n.helloPedro, style: AppTextStyles.heading),
-            SizedBox(height: AppSpacing.sm),
-            Text(
-              PassengerHomeI18n.indicateAbsencesAndChangeSchedules,
-              style: AppTextStyles.subHeading,
-            ),
-            SizedBox(height: AppSpacing.sm),
-            CustomButton(
-              text: PassengerHomeI18n.mySchedules,
-              color: AppColors.secondary,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Schedules()),
-                );
-              },
-              width: double.infinity,
-              borderRadius: 10,
-            ),
-            SizedBox(height: AppSpacing.sm),
-            CustomButton(
-              text: PassengerHomeI18n.myProfile,
-              color: AppColors.secondary,
-              onPressed: () {},
-              width: double.infinity,
-              borderRadius: 10,
-            ),
-            SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.md),
             Text(
               PassengerHomeI18n.yourDepartureIsConfirmed,
               style: AppTextStyles.heading,
@@ -88,6 +83,26 @@ class PassangerHomeState extends State<PassangerHome> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.schedule),
+            label: PassengerHomeI18n.mySchedules,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: PassengerHomeI18n.home,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: PassengerHomeI18n.myProfile,
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: AppColors.primary,
+        backgroundColor:  AppColors.navbar,
+        onTap: _onItemTapped,
       ),
     );
   }
