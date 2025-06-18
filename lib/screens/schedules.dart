@@ -78,7 +78,10 @@ class SchedulesState extends State<Schedules> {
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(showBusIcon: true),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.sm, horizontal: AppSpacing.lg),
+        padding: EdgeInsets.symmetric(
+          vertical: AppSpacing.sm,
+          horizontal: AppSpacing.lg,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -91,11 +94,16 @@ class SchedulesState extends State<Schedules> {
             SizedBox(height: AppSpacing.sm),
             ...List.generate(
               7,
+<<<<<<< Updated upstream
               (index) => _buildDayButton(
                 index,
                 morningDays[index],
                 MORNING_SHIFT,
               ),
+=======
+              (index) =>
+                  _buildDayButton(index, morningDays[index], MORNING_SHIFT),
+>>>>>>> Stashed changes
             ),
 
             SizedBox(height: AppSpacing.sm),
@@ -109,11 +117,16 @@ class SchedulesState extends State<Schedules> {
             SizedBox(height: AppSpacing.sm),
             ...List.generate(
               7,
+<<<<<<< Updated upstream
               (index) => _buildDayButton(
                 index,
                 afternoonDays[index],
                 AFTERNOON_SHIFT,
               ),
+=======
+              (index) =>
+                  _buildDayButton(index, afternoonDays[index], AFTERNOON_SHIFT),
+>>>>>>> Stashed changes
             ),
 
             SizedBox(height: AppSpacing.sm),

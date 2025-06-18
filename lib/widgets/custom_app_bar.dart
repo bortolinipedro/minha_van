@@ -18,24 +18,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.navbar,
       elevation: 0,
       automaticallyImplyLeading: false,
-      leading: showBackButton
-          ? IconButton(
-              icon: Icon(Icons.arrow_back, color: AppColors.secondary),
-              onPressed: () => Navigator.pop(context),
-            )
-          : null,
+      leading:
+          showBackButton
+              ? IconButton(
+                icon: Icon(Icons.arrow_back, color: AppColors.secondary),
+                onPressed: () => Navigator.pop(context),
+              )
+              : null,
       centerTitle: true,
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text("${CustomAppBarI18n.minha} ", style: AppTextStyles.title),
-          if (showBusIcon) Image.asset(
-            'assets/images/bus.png',
-            height: 24,
-          ),
+          if (showBusIcon) Image.asset('assets/images/bus.png', height: 24),
           Text(" ${CustomAppBarI18n.van}", style: AppTextStyles.title),
         ],
       ),

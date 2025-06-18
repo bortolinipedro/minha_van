@@ -5,6 +5,7 @@ import 'package:minha_van/constants/text_styles.dart';
 import 'package:minha_van/i18n/groups_list_i18n.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
 import 'package:minha_van/screens/group_details.dart';
+import 'package:minha_van/screens/driver_profile.dart';
 import 'package:minha_van/widgets/custom_button.dart';
 import 'dart:math' as math;
 import 'package:minha_van/helpers/sql_helper.dart';
@@ -18,6 +19,10 @@ class GroupsList extends StatefulWidget {
 
 class GroupsListState extends State<GroupsList> {
   List<Map<String, dynamic>> grupos = [];
+<<<<<<< Updated upstream
+=======
+  int _selectedIndex = 0;
+>>>>>>> Stashed changes
 
   @override
   void initState() {
@@ -84,6 +89,21 @@ class GroupsListState extends State<GroupsList> {
     );
   }
 
+  void _onItemTapped(int index) {
+    if (index == _selectedIndex) return;
+
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if (index == 1) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const DriverProfile()),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,6 +133,22 @@ class GroupsListState extends State<GroupsList> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: AppColors.primary,
+        backgroundColor: AppColors.navbar,
+        onTap: _onItemTapped,
+      ),
     );
   }
 
@@ -140,12 +176,20 @@ class GroupsListState extends State<GroupsList> {
     Navigator.push(
       context,
       MaterialPageRoute(
+<<<<<<< Updated upstream
         builder:
             (context) => GroupDetails(
               groupId: grupos[index]['id'],
               groupName: grupos[index]['name'],
               groupColor: Color(grupos[index]['color']),
             ),
+=======
+        builder: (context) => GroupDetails(
+          groupId: grupos[index]['id'],
+          groupName: grupos[index]['name'],
+          groupColor: Color(grupos[index]['color']),
+        ),
+>>>>>>> Stashed changes
       ),
     );
   }

@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
-import 'package:minha_van/screens/passenger_home.dart';
-=======
-import 'package:minha_van/screens/options.dart';
->>>>>>> Stashed changes
+import 'package:minha_van/screens/passenger_home.dart'; 
 import 'package:minha_van/screens/groups_list.dart';
-import 'package:minha_van/screens/passenger_home.dart';
-import 'package:minha_van/screens/register_driver_screen.dart';
-import 'package:minha_van/screens/register_passenger_screen.dart';
-
-void main() {
-<<<<<<< Updated upstream
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: const Options(),
-    routes: {
-      "/driver": (context) => GroupsList(),
-      "/passanger": (context) => PassangerHome(),
-    },
-  ));
-}
+import 'package:minha_van/screens/about.dart';
+import 'package:minha_van/widgets/custom_button.dart';
+import 'package:minha_van/constants/colors.dart';
+import 'package:minha_van/constants/text_styles.dart';
+import 'package:minha_van/constants/spacing.dart';
+import 'package:minha_van/i18n/main_i18n.dart';
+import 'package:minha_van/widgets/custom_app_bar.dart';
 
 class Options extends StatelessWidget {
   const Options({super.key});
@@ -55,7 +43,7 @@ class Options extends StatelessWidget {
                   text: MainI18n.iAmAPassenger,
                   color: AppColors.primary,
                   onPressed: () {
-                    Navigator.pushNamed(context, "/passanger");
+                    Navigator.pushNamed(context, "/passenger"); // Corrigido para "/passenger"
                   },
                   borderRadius: 10,
                   width: double.infinity,
@@ -80,25 +68,6 @@ class Options extends StatelessWidget {
           ),
         ),
       ),
-=======
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const Options(),
-      routes: {
-        "/driver": (context) => const GroupsList(),
-        "/passenger": (context) => const PassangerHome(),
-        "/register_driver": (context) => const RegisterDriverScreen(),
-        "/register_passenger": (context) => const RegisterPassengerScreen(),
-      },
->>>>>>> Stashed changes
     );
   }
 }
