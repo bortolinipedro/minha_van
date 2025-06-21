@@ -5,6 +5,8 @@ import 'package:minha_van/constants/text_styles.dart';
 import 'package:minha_van/constants/spacing.dart';
 import 'package:minha_van/i18n/driver_home_i18n.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
+import 'package:minha_van/services/auth_service.dart';
+import 'package:minha_van/widgets/auth_status.dart';
 
 class DriverHome extends StatefulWidget {
   const DriverHome({super.key});
@@ -20,6 +22,9 @@ class DriverHomeState extends State<DriverHome> {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         showBusIcon: true,
+        actions: const [
+          AuthStatus(),
+        ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
