@@ -5,7 +5,10 @@ import 'package:minha_van/constants/colors.dart';
 import 'package:minha_van/constants/text_styles.dart';
 import 'package:minha_van/i18n/passenger_home_i18n.dart';
 import 'package:minha_van/screens/schedules.dart';
+import 'package:minha_van/screens/profile.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
+import 'package:minha_van/services/auth_service.dart';
+import 'package:minha_van/widgets/auth_status.dart';
 
 class PassangerHome extends StatefulWidget {
   const PassangerHome({super.key});
@@ -31,6 +34,10 @@ class PassangerHomeState extends State<PassangerHome> {
         _selectedIndex = 1;
       });
     } else if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ProfileScreen()),
+      );
       setState(() {
         _selectedIndex = 1;
       });
@@ -43,6 +50,9 @@ class PassangerHomeState extends State<PassangerHome> {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         showBusIcon: true,
+        actions: const [
+          AuthStatus(),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),

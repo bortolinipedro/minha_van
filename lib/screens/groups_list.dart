@@ -8,6 +8,8 @@ import 'package:minha_van/screens/group_details.dart';
 import 'package:minha_van/widgets/custom_button.dart';
 import 'dart:math' as math;
 import 'package:minha_van/helpers/sql_helper.dart';
+import 'package:minha_van/services/auth_service.dart';
+import 'package:minha_van/widgets/auth_status.dart';
 
 class GroupsList extends StatefulWidget {
   const GroupsList({super.key});
@@ -88,7 +90,12 @@ class GroupsListState extends State<GroupsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBar(showBusIcon: true),
+      appBar: CustomAppBar(
+        showBusIcon: true,
+        actions: const [
+          AuthStatus(),
+        ],
+      ),
       body: Padding(
         padding: EdgeInsets.all(AppSpacing.sm),
         child: Column(

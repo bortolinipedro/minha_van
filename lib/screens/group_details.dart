@@ -4,7 +4,10 @@ import 'package:minha_van/constants/spacing.dart';
 import 'package:minha_van/constants/text_styles.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
 import 'package:minha_van/i18n/group_details_i18n.dart';
+import 'package:minha_van/widgets/custom_button.dart';
 import 'package:minha_van/helpers/sql_helper.dart';
+import 'package:minha_van/services/auth_service.dart';
+import 'package:minha_van/widgets/auth_status.dart';
 
 class GroupDetails extends StatefulWidget {
   final int groupId;
@@ -60,7 +63,12 @@ class _GroupDetailsState extends State<GroupDetails>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: CustomAppBar(showBusIcon: true),
+      appBar: CustomAppBar(
+        showBusIcon: true,
+        actions: const [
+          AuthStatus(),
+        ],
+      ),
       body: Column(
         children: [
           TabBar(
