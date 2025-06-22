@@ -1,0 +1,117 @@
+{
+  "users": {
+    "motorista1": {
+      "cpf": "12345678901",
+      "fullName": "Carlos Motorista",
+      "phone": "11999999999",
+      "address": {
+        "street": "Rua dos Motoristas, 100",
+        "complement": "Casa",
+        "city": "São Paulo",
+        "state": "SP",
+        "zipCode": "01001000"
+      },
+      "userType": "driver",
+      "createdAt": 1710000000000,
+      "updatedAt": 1710000000000
+    },
+    "passageiro1": {
+      "cpf": "23456789012",
+      "fullName": "Ana Passageira",
+      "phone": "11988888888",
+      "address": {
+        "street": "Rua das Passageiras, 200",
+        "complement": "Apto 12",
+        "city": "São Paulo",
+        "state": "SP",
+        "zipCode": "02002000"
+      },
+      "userType": "passenger",
+      "createdAt": 1710000001000,
+      "updatedAt": 1710000001000
+    },
+    "passageiro2": {
+      "cpf": "34567890123",
+      "fullName": "Bruno Passageiro",
+      "phone": "11977777777",
+      "address": {
+        "street": "Rua dos Passageiros, 300",
+        "complement": "",
+        "city": "São Paulo",
+        "state": "SP",
+        "zipCode": "03003000"
+      },
+      "userType": "passenger",
+      "createdAt": 1710000002000,
+      "updatedAt": 1710000002000
+    },
+    "uid_exemplo": {
+      "nome": "João da Silva",
+      "email": "joao@email.com",
+      "cpf": "123.456.789-00",
+      "telefone": "(11) 91234-5678",
+      "cep": "01001-000",
+      "rua": "Praça da Sé",
+      "numero": "100",
+      "bairro": "Sé",
+      "cidade": "São Paulo",
+      "estado": "SP"
+    }
+  },
+  "groups": {
+    "grupo1": {
+      "name": "Van Trabalho Centro",
+      "driverId": "motorista1",
+      "description": "Van para o centro de SP",
+      "maxPassengers": 8,
+      "currentPassengers": 2,
+      "route": {
+        "origin": "Zona Leste",
+        "destination": "Centro SP"
+      },
+      "schedule": {
+        "departureTime": 1710003600000,
+        "returnTime": 1710032400000,
+        "daysOfWeek": "segunda,terça,quarta,quinta,sexta"
+      },
+      "price": 30.00,
+      "status": "active",
+      "createdAt": 1710000000000,
+      "updatedAt": 1710000000000,
+      "passengers": {
+        "passageiro1": true,
+        "passageiro2": true
+      }
+    }
+  },
+  "passengerSchedules": {
+    "passageiro1": {
+      "agenda1": {
+        "groupId": "grupo1",
+        "date": 1710003600000,
+        "status": "scheduled",
+        "notes": "Vai embarcar na estação Tatuapé",
+        "createdAt": 1710000001000,
+        "updatedAt": 1710000001000
+      },
+      "agenda2": {
+        "groupId": "grupo1",
+        "date": 1710086400000,
+        "status": "scheduled",
+        "notes": "",
+        "createdAt": 1710000001000,
+        "updatedAt": 1710000001000
+      }
+    },
+    "passageiro2": {
+      "agenda1": {
+        "groupId": "grupo1",
+        "date": 1710003600000,
+        "status": "scheduled",
+        "notes": "Vai embarcar na estação Belém",
+        "createdAt": 1710000002000,
+        "updatedAt": 1710000002000
+      }
+    }
+  }
+} 

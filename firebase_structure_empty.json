@@ -1,0 +1,18 @@
+{
+  "users": {
+    "uid": {
+      "nome": "",
+      "email": "",
+      "cpf": "",
+      "telefone": "",
+      "cep": "",
+      "rua": "",
+      "numero": "",
+      "bairro": "",
+      "cidade": "",
+      "estado": ""
+    }
+  },
+  "groups": {},
+  "passengerSchedules": {}
+}

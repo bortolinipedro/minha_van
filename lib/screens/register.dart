@@ -8,6 +8,7 @@ import 'package:minha_van/widgets/custom_button.dart';
 import 'package:minha_van/widgets/custom_text_field.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
 import 'package:minha_van/widgets/auth_error_message.dart';
+import 'package:minha_van/services/user_profile_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -22,6 +23,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _cpfController = TextEditingController();
+  final _telefoneController = TextEditingController();
+  final _cepController = TextEditingController();
+  final _ruaController = TextEditingController();
+  final _numeroController = TextEditingController();
+  final _bairroController = TextEditingController();
+  final _cidadeController = TextEditingController();
+  final _estadoController = TextEditingController();
   
   bool _isLoading = false;
   String? _errorMessage;
@@ -32,7 +41,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _cpfController.dispose();
+    _telefoneController.dispose();
+    _cepController.dispose();
+    _ruaController.dispose();
+    _numeroController.dispose();
+    _bairroController.dispose();
+    _cidadeController.dispose();
+    _estadoController.dispose();
     super.dispose();
+  }
+
+  Future<void> _onCepChanged(String value) async {
+    if (value.length >= 8) {
+      final address = await UserProfileService.fetchAddressFromCep(value);
+      if (address != null) {
+        setState(() {
+          _ruaController.text = address['rua'] ?? '';
+          _bairroController.text = address['bairro'] ?? '';
+          _cidadeController.text = address['cidade'] ?? '';
+          _estadoController.text = address['estado'] ?? '';
+        });
+      }
+    }
   }
 
   Future<void> _signUp() async {
@@ -49,12 +80,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _nameController.text.trim(),
     );
 
+    if (result.isSuccess && result.user != null) {
+      // Salvar dados no Realtime Database
+      await UserProfileService.createOrUpdateUserProfile(
+        uid: result.user!.uid,
+        data: {
+          'nome': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'cpf': _cpfController.text.trim(),
+          'telefone': _telefoneController.text.trim(),
+          'cep': _cepController.text.trim(),
+          'rua': _ruaController.text.trim(),
+          'numero': _numeroController.text.trim(),
+          'bairro': _bairroController.text.trim(),
+          'cidade': _cidadeController.text.trim(),
+          'estado': _estadoController.text.trim(),
+        },
+      );
+    }
+
     setState(() {
       _isLoading = false;
     });
 
     if (result.isSuccess) {
-      // Show success message and navigate to main screen
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AuthI18n.registrationSuccess),
@@ -191,6 +240,121 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   obscureText: true,
                   validator: _validateConfirmPassword,
                   prefixIcon: const Icon(Icons.lock_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // CPF field
+                CustomTextField(
+                  label: 'CPF',
+                  hint: 'Digite seu CPF',
+                  controller: _cpfController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'CPF é obrigatório';
+                    if (value.length < 11) return 'CPF inválido';
+                    return null;
+                  },
+                  prefixIcon: const Icon(Icons.badge_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Telefone field
+                CustomTextField(
+                  label: 'Telefone',
+                  hint: 'Digite seu telefone',
+                  controller: _telefoneController,
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Telefone é obrigatório';
+                    return null;
+                  },
+                  prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // CEP field
+                CustomTextField(
+                  label: 'CEP',
+                  hint: 'Digite seu CEP',
+                  controller: _cepController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'CEP é obrigatório';
+                    if (value.length < 8) return 'CEP inválido';
+                    return null;
+                  },
+                  onChanged: _onCepChanged,
+                  prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Rua field
+                CustomTextField(
+                  label: 'Rua',
+                  hint: 'Digite sua rua',
+                  controller: _ruaController,
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Rua é obrigatória';
+                    return null;
+                  },
+                  prefixIcon: const Icon(Icons.home_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Número field
+                CustomTextField(
+                  label: 'Número',
+                  hint: 'Digite o número',
+                  controller: _numeroController,
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Número é obrigatório';
+                    return null;
+                  },
+                  prefixIcon: const Icon(Icons.confirmation_number_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Bairro field
+                CustomTextField(
+                  label: 'Bairro',
+                  hint: 'Digite seu bairro',
+                  controller: _bairroController,
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Bairro é obrigatório';
+                    return null;
+                  },
+                  prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Cidade field
+                CustomTextField(
+                  label: 'Cidade',
+                  hint: 'Digite sua cidade',
+                  controller: _cidadeController,
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Cidade é obrigatória';
+                    return null;
+                  },
+                  prefixIcon: const Icon(Icons.location_city, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Estado field
+                CustomTextField(
+                  label: 'Estado',
+                  hint: 'Digite seu estado',
+                  controller: _estadoController,
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Estado é obrigatório';
+                    return null;
+                  },
+                  prefixIcon: const Icon(Icons.flag_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.lg),
                 
