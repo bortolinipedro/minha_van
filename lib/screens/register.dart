@@ -9,6 +9,7 @@ import 'package:minha_van/widgets/custom_text_field.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
 import 'package:minha_van/widgets/auth_error_message.dart';
 import 'package:minha_van/services/user_profile_service.dart';
+import 'package:minha_van/helpers/input_masks.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -53,8 +54,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _onCepChanged(String value) async {
-    if (value.length >= 8) {
-      final address = await UserProfileService.fetchAddressFromCep(value);
+    final cleanCep = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (cleanCep.length >= 8) {
+      final address = await UserProfileService.fetchAddressFromCep(cleanCep);
       if (address != null) {
         setState(() {
           _ruaController.text = address['rua'] ?? '';
@@ -118,46 +120,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  String? _validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return AuthI18n.nameRequired;
-    }
-    if (value.trim().length < 2) {
-      return "Nome deve ter pelo menos 2 caracteres";
-    }
-    return null;
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return AuthI18n.emailRequired;
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return AuthI18n.invalidEmail;
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return AuthI18n.passwordRequired;
-    }
-    if (value.length < 6) {
-      return AuthI18n.passwordTooShort;
-    }
-    return null;
-  }
-
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return AuthI18n.passwordRequired;
-    }
-    if (value != _passwordController.text) {
-      return AuthI18n.passwordsDontMatch;
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,7 +167,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "Digite seu nome completo",
                   controller: _nameController,
                   keyboardType: TextInputType.name,
-                  validator: _validateName,
+                  validator: InputValidators.validateName,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.person_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -216,7 +179,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "seu@email.com",
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  validator: _validateEmail,
+                  validator: InputValidators.validateEmail,
                   prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -227,7 +190,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "Digite sua senha",
                   controller: _passwordController,
                   obscureText: true,
-                  validator: _validatePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return AuthI18n.passwordRequired;
+                    }
+                    if (value.length < 6) {
+                      return AuthI18n.passwordTooShort;
+                    }
+                    return null;
+                  },
                   prefixIcon: const Icon(Icons.lock_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -238,7 +209,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "Confirme sua senha",
                   controller: _confirmPasswordController,
                   obscureText: true,
-                  validator: _validateConfirmPassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return AuthI18n.passwordRequired;
+                    }
+                    if (value != _passwordController.text) {
+                      return AuthI18n.passwordsDontMatch;
+                    }
+                    return null;
+                  },
                   prefixIcon: const Icon(Icons.lock_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -249,11 +228,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: 'Digite seu CPF',
                   controller: _cpfController,
                   keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'CPF é obrigatório';
-                    if (value.length < 11) return 'CPF inválido';
-                    return null;
-                  },
+                  validator: InputValidators.validateCpf,
+                  formatter: InputFormatters.formatCpf,
+                  inputFormatters: [InputMasks.cpfMask],
                   prefixIcon: const Icon(Icons.badge_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -264,10 +241,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: 'Digite seu telefone',
                   controller: _telefoneController,
                   keyboardType: TextInputType.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Telefone é obrigatório';
-                    return null;
-                  },
+                  validator: InputValidators.validatePhone,
+                  formatter: InputFormatters.formatPhone,
+                  inputFormatters: [InputMasks.phoneMask],
                   prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -278,11 +254,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: 'Digite seu CEP',
                   controller: _cepController,
                   keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'CEP é obrigatório';
-                    if (value.length < 8) return 'CEP inválido';
-                    return null;
-                  },
+                  validator: InputValidators.validateCep,
+                  formatter: InputFormatters.formatCep,
+                  inputFormatters: [InputMasks.cepMask],
                   onChanged: _onCepChanged,
                   prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.textSecondary),
                 ),
@@ -294,10 +268,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: 'Digite sua rua',
                   controller: _ruaController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Rua é obrigatória';
-                    return null;
-                  },
+                  validator: InputValidators.validateStreet,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.home_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -308,10 +280,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: 'Digite o número',
                   controller: _numeroController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Número é obrigatório';
-                    return null;
-                  },
+                  validator: InputValidators.validateNumber,
                   prefixIcon: const Icon(Icons.confirmation_number_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -322,10 +291,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: 'Digite seu bairro',
                   controller: _bairroController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Bairro é obrigatório';
-                    return null;
-                  },
+                  validator: InputValidators.validateNeighborhood,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -336,10 +303,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: 'Digite sua cidade',
                   controller: _cidadeController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Cidade é obrigatória';
-                    return null;
-                  },
+                  validator: InputValidators.validateCity,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.location_city, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -350,10 +315,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: 'Digite seu estado',
                   controller: _estadoController,
                   keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Estado é obrigatório';
-                    return null;
-                  },
+                  validator: InputValidators.validateState,
+                  inputFormatters: [InputMasks.stateMask],
+                  maxLength: 2,
                   prefixIcon: const Icon(Icons.flag_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.lg),

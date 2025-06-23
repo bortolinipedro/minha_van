@@ -41,4 +41,41 @@ class UserProfileService {
     }
     return null;
   }
+
+  // Buscar múltiplos perfis de usuários de forma performática
+  static Future<Map<String, Map<String, dynamic>>> getMultipleUserProfiles(List<String> userIds) async {
+    try {
+      final Map<String, Map<String, dynamic>> profiles = {};
+      
+      // Buscar todos os perfis em uma única operação
+      final snapshot = await _db.child('users').get();
+      
+      if (snapshot.exists) {
+        final Map<dynamic, dynamic> allUsers = snapshot.value as Map;
+        
+        for (final userId in userIds) {
+          if (allUsers.containsKey(userId)) {
+            final userData = Map<String, dynamic>.from(allUsers[userId]);
+            profiles[userId] = userData;
+          }
+        }
+      }
+      
+      return profiles;
+    } catch (e) {
+      print('Erro ao buscar múltiplos perfis: $e');
+      return {};
+    }
+  }
+
+  // Buscar nome do usuário por ID
+  static Future<String> getUserName(String userId) async {
+    try {
+      final profile = await getUserProfile(userId);
+      return profile?['nome'] ?? 'Usuário';
+    } catch (e) {
+      print('Erro ao buscar nome do usuário: $e');
+      return 'Usuário';
+    }
+  }
 } 

@@ -45,6 +45,51 @@
       "createdAt": 1710000002000,
       "updatedAt": 1710000002000
     },
+    "user1": {
+      "uid": "user1",
+      "email": "joao@example.com",
+      "nome": "João Silva",
+      "cep": "01234-567",
+      "cidade": "São Paulo",
+      "rua": "Rua das Flores",
+      "bairro": "Centro",
+      "estado": "SP",
+      "numero": "123",
+      "cpf": "123.456.789-00",
+      "telefone": "(11) 99999-1111",
+      "createdAt": 1703123456789,
+      "updatedAt": 1703123456789
+    },
+    "user2": {
+      "uid": "user2",
+      "email": "maria@example.com",
+      "nome": "Maria Santos",
+      "cep": "04567-890",
+      "cidade": "São Paulo",
+      "rua": "Avenida Brasil",
+      "bairro": "Vila Madalena",
+      "estado": "SP",
+      "numero": "456",
+      "cpf": "987.654.321-00",
+      "telefone": "(11) 88888-2222",
+      "createdAt": 1703123456790,
+      "updatedAt": 1703123456790
+    },
+    "user3": {
+      "uid": "user3",
+      "email": "pedro@example.com",
+      "nome": "Pedro Costa",
+      "cep": "07890-123",
+      "cidade": "São Paulo",
+      "rua": "Rua Augusta",
+      "bairro": "Consolação",
+      "estado": "SP",
+      "numero": "789",
+      "cpf": "456.789.123-00",
+      "telefone": "(11) 77777-3333",
+      "createdAt": 1703123456791,
+      "updatedAt": 1703123456791
+    },
     "uid_exemplo": {
       "nome": "João da Silva",
       "email": "joao@email.com",
@@ -56,61 +101,328 @@
       "bairro": "Sé",
       "cidade": "São Paulo",
       "estado": "SP"
+    },
+    "uid_motorista": {
+      "nome": "Carlos Motorista",
+      "email": "carlos@email.com",
+      "cpf": "987.654.321-00",
+      "telefone": "(11) 99876-5432",
+      "cep": "02002-000",
+      "rua": "Rua Augusta",
+      "numero": "200",
+      "bairro": "Consolação",
+      "cidade": "São Paulo",
+      "estado": "SP"
+    },
+    "uid_passageiro1": {
+      "nome": "Ana Passageira",
+      "email": "ana@email.com",
+      "cpf": "111.222.333-44",
+      "telefone": "(11) 91111-1111",
+      "cep": "03003-000",
+      "rua": "Rua Oscar Freire",
+      "numero": "300",
+      "bairro": "Jardins",
+      "cidade": "São Paulo",
+      "estado": "SP"
+    },
+    "uid_passageiro2": {
+      "nome": "Bruno Silva",
+      "email": "bruno@email.com",
+      "cpf": "555.666.777-88",
+      "telefone": "(11) 92222-2222",
+      "cep": "04004-000",
+      "rua": "Avenida Paulista",
+      "numero": "400",
+      "bairro": "Bela Vista",
+      "cidade": "São Paulo",
+      "estado": "SP"
     }
   },
   "groups": {
-    "grupo1": {
+    "grupo_van_trabalho": {
+      "id": "grupo_van_trabalho",
       "name": "Van Trabalho Centro",
-      "driverId": "motorista1",
-      "description": "Van para o centro de SP",
-      "maxPassengers": 8,
-      "currentPassengers": 2,
-      "route": {
-        "origin": "Zona Leste",
-        "destination": "Centro SP"
-      },
-      "schedule": {
-        "departureTime": 1710003600000,
-        "returnTime": 1710032400000,
-        "daysOfWeek": "segunda,terça,quarta,quinta,sexta"
-      },
-      "price": 30.00,
-      "status": "active",
+      "description": "Van para transporte de funcionários ao centro de São Paulo",
+      "creatorId": "uid_motorista",
+      "creatorName": "Carlos Motorista",
+      "groupCode": "TRABALHO",
       "createdAt": 1710000000000,
       "updatedAt": 1710000000000,
-      "passengers": {
-        "passageiro1": true,
-        "passageiro2": true
+      "members": {
+        "uid_motorista": {
+          "name": "Carlos Motorista",
+          "role": "creator",
+          "joinedAt": 1710000000000
+        },
+        "uid_passageiro1": {
+          "name": "Ana Passageira",
+          "role": "member",
+          "joinedAt": 1710000001000
+        },
+        "uid_passageiro2": {
+          "name": "Bruno Silva",
+          "role": "member",
+          "joinedAt": 1710000002000
+        }
+      },
+      "joinRequests": {}
+    },
+    "grupo_van_faculdade": {
+      "id": "grupo_van_faculdade",
+      "name": "Van Faculdade USP",
+      "description": "Van para estudantes da USP - Campus Butantã",
+      "creatorId": "uid_motorista",
+      "creatorName": "Carlos Motorista",
+      "groupCode": "USP",
+      "createdAt": 1710000003000,
+      "updatedAt": 1710000003000,
+      "members": {
+        "uid_motorista": {
+          "name": "Carlos Motorista",
+          "role": "creator",
+          "joinedAt": 1710000003000
+        }
+      },
+      "joinRequests": {}
+    },
+    "group1": {
+      "id": "group1",
+      "name": "Van do João",
+      "description": "Grupo para viagens regulares ao centro da cidade",
+      "creatorId": "user1",
+      "creatorName": "João Silva",
+      "groupCode": "ABC123",
+      "createdAt": 1703123456789,
+      "updatedAt": 1703123456789,
+      "members": {
+        "user1": {
+          "name": "João Silva",
+          "role": "creator",
+          "joinedAt": 1703123456789
+        },
+        "user2": {
+          "name": "Maria Santos",
+          "role": "member",
+          "joinedAt": 1703123456790
+        }
+      },
+      "joinRequests": {
+        "user3": {
+          "userId": "user3",
+          "userName": "Pedro Costa",
+          "requestedAt": 1703123456791,
+          "status": "pending"
+        }
+      }
+    },
+    "group2": {
+      "id": "group2",
+      "name": "Van da Maria",
+      "description": "Grupo para viagens aos finais de semana",
+      "creatorId": "user2",
+      "creatorName": "Maria Santos",
+      "groupCode": "XYZ789",
+      "createdAt": 1703123456792,
+      "updatedAt": 1703123456792,
+      "members": {
+        "user2": {
+          "name": "Maria Santos",
+          "role": "creator",
+          "joinedAt": 1703123456792
+        }
+      },
+      "joinRequests": {}
+    }
+  },
+  "schedules": {
+    "group1": {
+      "user1": {
+        "schedule_monday": {
+          "userId": "user1",
+          "userName": "João Silva",
+          "groupId": "group1",
+          "groupName": "Van do João",
+          "dayOfWeek": 1,
+          "going": {
+            "enabled": true,
+            "time": "08:00",
+            "pickupLocation": "Rua das Flores, 123",
+            "notes": "Ponto de ônibus próximo"
+          },
+          "returning": {
+            "enabled": true,
+            "time": "18:00",
+            "pickupLocation": "Centro - Metrô Sé",
+            "notes": "Em frente ao metrô"
+          },
+          "createdAt": 1703123456789,
+          "updatedAt": 1703123456789
+        },
+        "schedule_tuesday": {
+          "userId": "user1",
+          "userName": "João Silva",
+          "groupId": "group1",
+          "groupName": "Van do João",
+          "dayOfWeek": 2,
+          "going": {
+            "enabled": true,
+            "time": "08:00",
+            "pickupLocation": "Rua das Flores, 123",
+            "notes": "Ponto de ônibus próximo"
+          },
+          "returning": {
+            "enabled": true,
+            "time": "18:00",
+            "pickupLocation": "Centro - Metrô Sé",
+            "notes": "Em frente ao metrô"
+          },
+          "createdAt": 1703123456789,
+          "updatedAt": 1703123456789
+        }
+      },
+      "user2": {
+        "schedule_monday": {
+          "userId": "user2",
+          "userName": "Maria Santos",
+          "groupId": "group1",
+          "groupName": "Van do João",
+          "dayOfWeek": 1,
+          "going": {
+            "enabled": true,
+            "time": "08:30",
+            "pickupLocation": "Avenida Brasil, 456",
+            "notes": "Em frente ao shopping"
+          },
+          "returning": {
+            "enabled": false,
+            "time": "18:00",
+            "pickupLocation": "",
+            "notes": "Não volta hoje"
+          },
+          "createdAt": 1703123456790,
+          "updatedAt": 1703123456790
+        }
+      }
+    },
+    "grupo_van_trabalho": {
+      "uid_passageiro1": {
+        "schedule_monday": {
+          "userId": "uid_passageiro1",
+          "userName": "Ana Passageira",
+          "groupId": "grupo_van_trabalho",
+          "groupName": "Van Trabalho Centro",
+          "dayOfWeek": 1,
+          "going": {
+            "enabled": true,
+            "time": "07:30",
+            "pickupLocation": "Rua Oscar Freire, 300",
+            "notes": "Em frente ao prédio"
+          },
+          "returning": {
+            "enabled": true,
+            "time": "17:30",
+            "pickupLocation": "Centro - Av. Paulista",
+            "notes": "Em frente ao shopping"
+          },
+          "createdAt": 1710000001000,
+          "updatedAt": 1710000001000
+        }
+      },
+      "uid_passageiro2": {
+        "schedule_monday": {
+          "userId": "uid_passageiro2",
+          "userName": "Bruno Silva",
+          "groupId": "grupo_van_trabalho",
+          "groupName": "Van Trabalho Centro",
+          "dayOfWeek": 1,
+          "going": {
+            "enabled": true,
+            "time": "08:00",
+            "pickupLocation": "Avenida Paulista, 400",
+            "notes": "Em frente ao metrô"
+          },
+          "returning": {
+            "enabled": true,
+            "time": "18:00",
+            "pickupLocation": "Centro - Av. Paulista",
+            "notes": "Em frente ao shopping"
+          },
+          "createdAt": 1710000002000,
+          "updatedAt": 1710000002000
+        }
       }
     }
   },
-  "passengerSchedules": {
-    "passageiro1": {
-      "agenda1": {
-        "groupId": "grupo1",
-        "date": 1710003600000,
-        "status": "scheduled",
-        "notes": "Vai embarcar na estação Tatuapé",
-        "createdAt": 1710000001000,
-        "updatedAt": 1710000001000
+  "dailySchedules": {
+    "2024-01-15": {
+      "group1": {
+        "user1": {
+          "going": {
+            "confirmed": true,
+            "time": "08:00",
+            "pickupLocation": "Rua das Flores, 123",
+            "notes": "Ponto de ônibus próximo",
+            "confirmedAt": 1703123456789
+          },
+          "returning": {
+            "confirmed": true,
+            "time": "18:00",
+            "pickupLocation": "Centro - Metrô Sé",
+            "notes": "Em frente ao metrô",
+            "confirmedAt": 1703123456789
+          }
+        },
+        "user2": {
+          "going": {
+            "confirmed": true,
+            "time": "08:30",
+            "pickupLocation": "Avenida Brasil, 456",
+            "notes": "Em frente ao shopping",
+            "confirmedAt": 1703123456790
+          },
+          "returning": {
+            "confirmed": false,
+            "time": "18:00",
+            "pickupLocation": "",
+            "notes": "Não volta hoje",
+            "confirmedAt": 1703123456790
+          }
+        }
       },
-      "agenda2": {
-        "groupId": "grupo1",
-        "date": 1710086400000,
-        "status": "scheduled",
-        "notes": "",
-        "createdAt": 1710000001000,
-        "updatedAt": 1710000001000
-      }
-    },
-    "passageiro2": {
-      "agenda1": {
-        "groupId": "grupo1",
-        "date": 1710003600000,
-        "status": "scheduled",
-        "notes": "Vai embarcar na estação Belém",
-        "createdAt": 1710000002000,
-        "updatedAt": 1710000002000
+      "grupo_van_trabalho": {
+        "uid_passageiro1": {
+          "going": {
+            "confirmed": true,
+            "time": "07:30",
+            "pickupLocation": "Rua Oscar Freire, 300",
+            "notes": "Em frente ao prédio",
+            "confirmedAt": 1710000001000
+          },
+          "returning": {
+            "confirmed": true,
+            "time": "17:30",
+            "pickupLocation": "Centro - Av. Paulista",
+            "notes": "Em frente ao shopping",
+            "confirmedAt": 1710000001000
+          }
+        },
+        "uid_passageiro2": {
+          "going": {
+            "confirmed": true,
+            "time": "08:00",
+            "pickupLocation": "Avenida Paulista, 400",
+            "notes": "Em frente ao metrô",
+            "confirmedAt": 1710000002000
+          },
+          "returning": {
+            "confirmed": true,
+            "time": "18:00",
+            "pickupLocation": "Centro - Av. Paulista",
+            "notes": "Em frente ao shopping",
+            "confirmedAt": 1710000002000
+          }
+        }
       }
     }
   }

@@ -10,9 +10,76 @@
       "numero": "",
       "bairro": "",
       "cidade": "",
-      "estado": ""
+      "estado": "",
+      "createdAt": 0,
+      "updatedAt": 0
     }
   },
-  "groups": {},
-  "passengerSchedules": {}
+  "groups": {
+    "groupId": {
+      "id": "",
+      "name": "",
+      "creatorId": "",
+      "groupCode": "",
+      "createdAt": 0,
+      "updatedAt": 0,
+      "members": {
+        "memberId": {
+          "role": "member",
+          "joinedAt": 0
+        }
+      },
+      "joinRequests": {
+        "requestId": {
+          "userId": "",
+          "requestedAt": 0,
+          "status": "pending"
+        }
+      }
+    }
+  },
+  "schedules": {
+    "groupId": {
+      "userId": {
+        "scheduleId": {
+          "userId": "",
+          "groupId": "",
+          "groupName": "",
+          "dayOfWeek": 1,
+          "going": {
+            "enabled": true,
+            "time": "08:00",
+            "pickupLocation": ""
+          },
+          "returning": {
+            "enabled": true,
+            "time": "18:00",
+            "pickupLocation": ""
+          },
+          "createdAt": 0,
+          "updatedAt": 0
+        }
+      }
+    }
+  },
+  "dailySchedules": {
+    "date": {
+      "groupId": {
+        "userId": {
+          "going": {
+            "confirmed": true,
+            "time": "08:00",
+            "pickupLocation": "",
+            "confirmedAt": 0
+          },
+          "returning": {
+            "confirmed": true,
+            "time": "18:00",
+            "pickupLocation": "",
+            "confirmedAt": 0
+          }
+        }
+      }
+    }
+  }
 }

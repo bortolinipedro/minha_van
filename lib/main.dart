@@ -86,44 +86,89 @@ class Options extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: AppSpacing.md),
-              
               // User info
               const UserInfo(),
-              
               // Main options
-              Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomButton(
-                        text: MainI18n.iAmADriver,
-                        color: AppColors.secondary,
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/driver");
-                        },
-                        borderRadius: 10,
+              Padding(
+                padding: EdgeInsets.only(top: AppSpacing.xl),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, "/driver"),
+                      child: Container(
                         width: double.infinity,
                         height: 145,
-                        padding: const EdgeInsets.symmetric(vertical: 60),
+                        margin: EdgeInsets.only(bottom: AppSpacing.md),
+                        padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.secondary.withOpacity(0.08),
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.directions_bus_filled_rounded, size: 48, color: Colors.white),
+                            SizedBox(height: AppSpacing.sm),
+                            Text(
+                              'Home Motorista',
+                              style: AppTextStyles.heading.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: AppSpacing.md),
-                      CustomButton(
-                        text: MainI18n.iAmAPassenger,
-                        color: AppColors.primary,
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/passanger");
-                        },
-                        borderRadius: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, "/passanger"),
+                      child: Container(
                         width: double.infinity,
                         height: 145,
-                        padding: const EdgeInsets.symmetric(vertical: 60),
+                        padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.08),
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.emoji_people_rounded, size: 48, color: Colors.white),
+                            SizedBox(height: AppSpacing.sm),
+                            Text(
+                              'Home Passageiro',
+                              style: AppTextStyles.heading.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              
+              const Spacer(),
               // About link
               GestureDetector(
                 onTap: () => Navigator.push(

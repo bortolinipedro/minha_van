@@ -9,6 +9,7 @@ import 'package:minha_van/services/auth_service.dart';
 import 'package:minha_van/widgets/auth_status.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:minha_van/services/user_profile_service.dart';
+import 'package:minha_van/helpers/input_masks.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -74,8 +75,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _onCepChanged(String value) async {
-    if (value.length >= 8) {
-      final address = await UserProfileService.fetchAddressFromCep(value);
+    final cleanCep = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (cleanCep.length >= 8) {
+      final address = await UserProfileService.fetchAddressFromCep(cleanCep);
       if (address != null) {
         setState(() {
           _ruaController.text = address['rua'] ?? '';
@@ -282,15 +284,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _nameController,
                   keyboardType: TextInputType.name,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nome é obrigatório';
-                    }
-                    if (value.trim().length < 2) {
-                      return 'Nome deve ter pelo menos 2 caracteres';
-                    }
-                    return null;
-                  },
+                  validator: InputValidators.validateName,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.person_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -313,11 +308,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _cpfController,
                   keyboardType: TextInputType.number,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'CPF é obrigatório';
-                    if (value.length < 11) return 'CPF inválido';
-                    return null;
-                  },
+                  validator: InputValidators.validateCpf,
+                  formatter: InputFormatters.formatCpf,
+                  inputFormatters: [InputMasks.cpfMask],
                   prefixIcon: const Icon(Icons.badge_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -329,10 +322,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _telefoneController,
                   keyboardType: TextInputType.phone,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Telefone é obrigatório';
-                    return null;
-                  },
+                  validator: InputValidators.validatePhone,
+                  formatter: InputFormatters.formatPhone,
+                  inputFormatters: [InputMasks.phoneMask],
                   prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -344,11 +336,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _cepController,
                   keyboardType: TextInputType.number,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'CEP é obrigatório';
-                    if (value.length < 8) return 'CEP inválido';
-                    return null;
-                  },
+                  validator: InputValidators.validateCep,
+                  formatter: InputFormatters.formatCep,
+                  inputFormatters: [InputMasks.cepMask],
                   onChanged: _isEditing ? _onCepChanged : null,
                   prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.textSecondary),
                 ),
@@ -361,10 +351,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _ruaController,
                   keyboardType: TextInputType.text,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Rua é obrigatória';
-                    return null;
-                  },
+                  validator: InputValidators.validateStreet,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.home_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -376,10 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _numeroController,
                   keyboardType: TextInputType.text,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Número é obrigatório';
-                    return null;
-                  },
+                  validator: InputValidators.validateNumber,
                   prefixIcon: const Icon(Icons.confirmation_number_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -391,10 +376,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _bairroController,
                   keyboardType: TextInputType.text,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Bairro é obrigatório';
-                    return null;
-                  },
+                  validator: InputValidators.validateNeighborhood,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -406,10 +389,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _cidadeController,
                   keyboardType: TextInputType.text,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Cidade é obrigatória';
-                    return null;
-                  },
+                  validator: InputValidators.validateCity,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.location_city, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -421,10 +402,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _estadoController,
                   keyboardType: TextInputType.text,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Estado é obrigatório';
-                    return null;
-                  },
+                  validator: InputValidators.validateState,
+                  inputFormatters: [InputMasks.stateMask],
+                  maxLength: 2,
                   prefixIcon: const Icon(Icons.flag_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.lg),
