@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:minha_van/constants/colors.dart';
 import 'package:minha_van/constants/text_styles.dart';
 import 'package:minha_van/constants/spacing.dart';
@@ -15,6 +16,9 @@ class CustomTextField extends StatelessWidget {
   final bool enabled;
   final int? maxLines;
   final int? maxLength;
+  final ValueChanged<String>? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? Function(String)? formatter;
 
   const CustomTextField({
     super.key,
@@ -29,6 +33,9 @@ class CustomTextField extends StatelessWidget {
     this.enabled = true,
     this.maxLines = 1,
     this.maxLength,
+    this.onChanged,
+    this.inputFormatters,
+    this.formatter,
   });
 
   @override
@@ -52,6 +59,19 @@ class CustomTextField extends StatelessWidget {
           maxLines: maxLines,
           maxLength: maxLength,
           style: AppTextStyles.listHeading,
+          onChanged: (value) {
+            if (formatter != null) {
+              final formattedValue = formatter!(value);
+              if (formattedValue != null && formattedValue != value && controller != null) {
+                controller!.text = formattedValue;
+                controller!.selection = TextSelection.fromPosition(
+                  TextPosition(offset: formattedValue.length),
+                );
+              }
+            }
+            onChanged?.call(value);
+          },
+          inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: AppTextStyles.listSubheading,

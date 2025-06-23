@@ -16,41 +16,65 @@ class About extends StatelessWidget {
         showBusIcon: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(AppSpacing.sm),
+        padding: EdgeInsets.all(AppSpacing.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: AppSpacing.lg),
+            Center(
+              child: CircleAvatar(
+                radius: 36,
+                backgroundColor: AppColors.primary.withOpacity(0.1),
+                child: Icon(Icons.directions_bus_filled_rounded, size: 40, color: AppColors.primary),
+              ),
+            ),
+            SizedBox(height: AppSpacing.lg),
+            _AboutSection(
+              title: AboutI18n.members,
+              content: AboutI18n.membersList,
+            ),
+            SizedBox(height: AppSpacing.md),
+            _AboutSection(
+              title: AboutI18n.objective,
+              content: AboutI18n.objectiveText,
+            ),
+            SizedBox(height: AppSpacing.md),
+            _AboutSection(
+              title: AboutI18n.targetAudience,
+              content: AboutI18n.targetAudienceList,
+            ),
+            SizedBox(height: AppSpacing.md),
+            _AboutSection(
+              title: AboutI18n.mainFeatures,
+              content: AboutI18n.featuresList,
+            ),
+            SizedBox(height: AppSpacing.lg),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AboutSection extends StatelessWidget {
+  final String title;
+  final String content;
+  const _AboutSection({required this.title, required this.content});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(AboutI18n.members, style: AppTextStyles.heading),
+            Text(title, style: AppTextStyles.heading.copyWith(fontSize: 20)),
             SizedBox(height: AppSpacing.sm),
             Text(
-              AboutI18n.membersList, 
-              style: AppTextStyles.subHeading,
-              textAlign: TextAlign.justify,
-            ),
-            
-            SizedBox(height: AppSpacing.sm),
-            Text(AboutI18n.objective, style: AppTextStyles.heading),
-            SizedBox(height: AppSpacing.sm),
-            Text(
-              AboutI18n.objectiveText, 
-              style: AppTextStyles.subHeading,
-              textAlign: TextAlign.justify,
-            ),
-            
-            SizedBox(height: AppSpacing.sm),
-            Text(AboutI18n.targetAudience, style: AppTextStyles.heading),
-            SizedBox(height: AppSpacing.sm),
-            Text(
-              AboutI18n.targetAudienceList, 
-              style: AppTextStyles.subHeading,
-              textAlign: TextAlign.justify,
-            ),
-            
-            SizedBox(height: AppSpacing.sm),
-            Text(AboutI18n.mainFeatures, style: AppTextStyles.heading),
-            SizedBox(height: AppSpacing.sm),
-            Text(
-              AboutI18n.featuresList, 
+              content,
               style: AppTextStyles.subHeading,
               textAlign: TextAlign.justify,
             ),

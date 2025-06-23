@@ -21,6 +21,7 @@ class DriverHomeState extends State<DriverHome> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
+        showBackButton: true,
         showBusIcon: true,
         actions: const [
           AuthStatus(),
@@ -40,7 +41,20 @@ class DriverHomeState extends State<DriverHome> {
               DriverHomeI18n.manageVanAndPassengers,
               style: AppTextStyles.subHeading,
             ),
-            SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.lg),
+            
+            // Botão para gerenciar grupos
+            CustomButton(
+              text: 'Gerenciar Grupos',
+              color: AppColors.primary,
+              onPressed: () {
+                Navigator.pushNamed(context, "/driver");
+              },
+              width: double.infinity,
+              height: 56,
+            ),
+            SizedBox(height: AppSpacing.md),
+            
             CustomButton(
               text: DriverHomeI18n.backToHomeScreen,
               color: AppColors.secondary,

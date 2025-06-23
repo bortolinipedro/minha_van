@@ -3,14 +3,16 @@ import 'package:minha_van/constants/colors.dart';
 import 'package:minha_van/constants/spacing.dart';
 import 'package:minha_van/constants/text_styles.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
-import 'package:minha_van/i18n/group_details_i18n.dart';
 import 'package:minha_van/widgets/custom_button.dart';
-import 'package:minha_van/helpers/sql_helper.dart';
 import 'package:minha_van/services/auth_service.dart';
+import 'package:minha_van/services/group_service.dart';
+import 'package:minha_van/services/user_profile_service.dart';
 import 'package:minha_van/widgets/auth_status.dart';
+import 'package:minha_van/screens/driver_group_details.dart';
+import 'package:minha_van/screens/passenger_group_details.dart';
 
 class GroupDetails extends StatefulWidget {
-  final int groupId;
+  final String groupId;
   final String groupName;
   final Color groupColor;
 
@@ -25,102 +27,120 @@ class GroupDetails extends StatefulWidget {
   State<GroupDetails> createState() => _GroupDetailsState();
 }
 
-class _GroupDetailsState extends State<GroupDetails>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
-  List<Map<String, dynamic>> passengersThatGo = [];
-  List<Map<String, dynamic>> passengersThatComeBack = [];
-
-  static const _tabs = [
-    Tab(text: GroupDetailsI18n.goingToday),
-    Tab(text: GroupDetailsI18n.returningToday),
-  ];
+class _GroupDetailsState extends State<GroupDetails> {
+  Map<String, dynamic>? _groupData;
+  bool _isLoading = true;
+  String? _errorMessage;
+  bool _isCreator = false;
+  String? _currentUserId;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
-    _loadPassengers();
+    _loadUserInfo();
   }
 
-  Future<void> _loadPassengers() async {
-    final goingPassengers = await SQLHelper.getPassengers(1, true);
-    final returningPassengers = await SQLHelper.getPassengers(1, false);
-    
+  Future<void> _loadUserInfo() async {
     setState(() {
-      passengersThatGo = goingPassengers;
-      passengersThatComeBack = returningPassengers;
+      _isLoading = true;
+      _errorMessage = null;
     });
-  }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+    try {
+      final user = authService.value.currentUser;
+      if (user == null) {
+        setState(() {
+          _errorMessage = 'Usuário não autenticado';
+          _isLoading = false;
+        });
+        return;
+      }
+
+      _currentUserId = user.uid;
+
+      // Buscar dados do grupo
+      final groupData = await GroupService.getGroupById(widget.groupId);
+      if (groupData != null) {
+        setState(() {
+          _groupData = groupData;
+          _isCreator = groupData['creatorId'] == user.uid;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _errorMessage = 'Grupo não encontrado';
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Erro ao carregar dados: $e';
+        _isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(
         showBusIcon: true,
-        actions: const [
-          AuthStatus(),
-        ],
-      ),
-      body: Column(
-        children: [
-          TabBar(
-            controller: _tabController,
-            labelColor: AppColors.textPrimary,
-            unselectedLabelColor: AppColors.textSecondary,
-            indicatorColor: AppColors.primary,
-            tabs: _tabs,
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildpassengersList(passengersThatGo),
-                _buildpassengersList(passengersThatComeBack),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+          actions: const [AuthStatus()],
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+                }
 
-  Widget _buildpassengersList(List<Map<String, dynamic>> passengersArg) {
-    return ListView.separated(
-      itemCount: passengersArg.length,
-      separatorBuilder: (_, __) => const Divider(height: 1),
-      itemBuilder: (context, index) {
-        final passenger = passengersArg[index];
-        final address = "${passenger['street']} - ${passenger['neighborhood']}";
-        
-        return Padding(
-          padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-            title: Text(
-              "${passenger['name']} | $address",
-              style: AppTextStyles.listHeading,
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 2),
-                Text(
-                  passenger['phone_number'],
-                  style: AppTextStyles.listSubheading,
+    if (_errorMessage != null) {
+      return Scaffold(
+        backgroundColor: AppColors.white,
+        appBar: CustomAppBar(
+          showBusIcon: true,
+          actions: const [AuthStatus()],
+      ),
+        body: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(AppSpacing.lg),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error, size: 64, color: Colors.red),
+                        SizedBox(height: AppSpacing.md),
+                        Text(
+                          _errorMessage!,
+                          style: AppTextStyles.listHeading.copyWith(
+                            color: Colors.red,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: AppSpacing.md),
+                        CustomButton(
+                          text: 'Tentar Novamente',
+                          color: AppColors.primary,
+                  onPressed: _loadUserInfo,
                 ),
               ],
             ),
           ),
-        );
-      },
+        ),
+      );
+    }
+
+    // Redirecionar para a tela apropriada baseado no tipo de usuário
+    if (_isCreator) {
+      return DriverGroupDetails(
+        groupId: widget.groupId,
+        groupName: widget.groupName,
+        groupColor: widget.groupColor,
     );
+    } else {
+      return PassengerGroupDetails(
+        groupId: widget.groupId,
+        groupName: widget.groupName,
+        groupColor: widget.groupColor,
+      );
+    }
   }
 }

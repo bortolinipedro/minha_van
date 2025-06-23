@@ -8,6 +8,8 @@ import 'package:minha_van/widgets/custom_button.dart';
 import 'package:minha_van/widgets/custom_text_field.dart';
 import 'package:minha_van/widgets/custom_app_bar.dart';
 import 'package:minha_van/widgets/auth_error_message.dart';
+import 'package:minha_van/services/user_profile_service.dart';
+import 'package:minha_van/helpers/input_masks.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -22,6 +24,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _cpfController = TextEditingController();
+  final _telefoneController = TextEditingController();
+  final _cepController = TextEditingController();
+  final _ruaController = TextEditingController();
+  final _numeroController = TextEditingController();
+  final _bairroController = TextEditingController();
+  final _cidadeController = TextEditingController();
+  final _estadoController = TextEditingController();
   
   bool _isLoading = false;
   String? _errorMessage;
@@ -32,7 +42,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _cpfController.dispose();
+    _telefoneController.dispose();
+    _cepController.dispose();
+    _ruaController.dispose();
+    _numeroController.dispose();
+    _bairroController.dispose();
+    _cidadeController.dispose();
+    _estadoController.dispose();
     super.dispose();
+  }
+
+  Future<void> _onCepChanged(String value) async {
+    final cleanCep = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (cleanCep.length >= 8) {
+      final address = await UserProfileService.fetchAddressFromCep(cleanCep);
+      if (address != null) {
+        setState(() {
+          _ruaController.text = address['rua'] ?? '';
+          _bairroController.text = address['bairro'] ?? '';
+          _cidadeController.text = address['cidade'] ?? '';
+          _estadoController.text = address['estado'] ?? '';
+        });
+      }
+    }
   }
 
   Future<void> _signUp() async {
@@ -49,12 +82,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _nameController.text.trim(),
     );
 
+    if (result.isSuccess && result.user != null) {
+      // Salvar dados no Realtime Database
+      await UserProfileService.createOrUpdateUserProfile(
+        uid: result.user!.uid,
+        data: {
+          'nome': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'cpf': _cpfController.text.trim(),
+          'telefone': _telefoneController.text.trim(),
+          'cep': _cepController.text.trim(),
+          'rua': _ruaController.text.trim(),
+          'numero': _numeroController.text.trim(),
+          'bairro': _bairroController.text.trim(),
+          'cidade': _cidadeController.text.trim(),
+          'estado': _estadoController.text.trim(),
+        },
+      );
+    }
+
     setState(() {
       _isLoading = false;
     });
 
     if (result.isSuccess) {
-      // Show success message and navigate to main screen
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AuthI18n.registrationSuccess),
@@ -67,46 +118,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _errorMessage = result.errorMessage;
       });
     }
-  }
-
-  String? _validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return AuthI18n.nameRequired;
-    }
-    if (value.trim().length < 2) {
-      return "Nome deve ter pelo menos 2 caracteres";
-    }
-    return null;
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return AuthI18n.emailRequired;
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return AuthI18n.invalidEmail;
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return AuthI18n.passwordRequired;
-    }
-    if (value.length < 6) {
-      return AuthI18n.passwordTooShort;
-    }
-    return null;
-  }
-
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return AuthI18n.passwordRequired;
-    }
-    if (value != _passwordController.text) {
-      return AuthI18n.passwordsDontMatch;
-    }
-    return null;
   }
 
   @override
@@ -156,7 +167,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "Digite seu nome completo",
                   controller: _nameController,
                   keyboardType: TextInputType.name,
-                  validator: _validateName,
+                  validator: InputValidators.validateName,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.person_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -167,7 +179,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "seu@email.com",
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  validator: _validateEmail,
+                  validator: InputValidators.validateEmail,
                   prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -178,7 +190,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "Digite sua senha",
                   controller: _passwordController,
                   obscureText: true,
-                  validator: _validatePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return AuthI18n.passwordRequired;
+                    }
+                    if (value.length < 6) {
+                      return AuthI18n.passwordTooShort;
+                    }
+                    return null;
+                  },
                   prefixIcon: const Icon(Icons.lock_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -189,8 +209,116 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: "Confirme sua senha",
                   controller: _confirmPasswordController,
                   obscureText: true,
-                  validator: _validateConfirmPassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return AuthI18n.passwordRequired;
+                    }
+                    if (value != _passwordController.text) {
+                      return AuthI18n.passwordsDontMatch;
+                    }
+                    return null;
+                  },
                   prefixIcon: const Icon(Icons.lock_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // CPF field
+                CustomTextField(
+                  label: 'CPF',
+                  hint: 'Digite seu CPF',
+                  controller: _cpfController,
+                  keyboardType: TextInputType.number,
+                  validator: InputValidators.validateCpf,
+                  formatter: InputFormatters.formatCpf,
+                  inputFormatters: [InputMasks.cpfMask],
+                  prefixIcon: const Icon(Icons.badge_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Telefone field
+                CustomTextField(
+                  label: 'Telefone',
+                  hint: 'Digite seu telefone',
+                  controller: _telefoneController,
+                  keyboardType: TextInputType.phone,
+                  validator: InputValidators.validatePhone,
+                  formatter: InputFormatters.formatPhone,
+                  inputFormatters: [InputMasks.phoneMask],
+                  prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // CEP field
+                CustomTextField(
+                  label: 'CEP',
+                  hint: 'Digite seu CEP',
+                  controller: _cepController,
+                  keyboardType: TextInputType.number,
+                  validator: InputValidators.validateCep,
+                  formatter: InputFormatters.formatCep,
+                  inputFormatters: [InputMasks.cepMask],
+                  onChanged: _onCepChanged,
+                  prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Rua field
+                CustomTextField(
+                  label: 'Rua',
+                  hint: 'Digite sua rua',
+                  controller: _ruaController,
+                  keyboardType: TextInputType.text,
+                  validator: InputValidators.validateStreet,
+                  inputFormatters: [InputMasks.textOnly],
+                  prefixIcon: const Icon(Icons.home_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Número field
+                CustomTextField(
+                  label: 'Número',
+                  hint: 'Digite o número',
+                  controller: _numeroController,
+                  keyboardType: TextInputType.text,
+                  validator: InputValidators.validateNumber,
+                  prefixIcon: const Icon(Icons.confirmation_number_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Bairro field
+                CustomTextField(
+                  label: 'Bairro',
+                  hint: 'Digite seu bairro',
+                  controller: _bairroController,
+                  keyboardType: TextInputType.text,
+                  validator: InputValidators.validateNeighborhood,
+                  inputFormatters: [InputMasks.textOnly],
+                  prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Cidade field
+                CustomTextField(
+                  label: 'Cidade',
+                  hint: 'Digite sua cidade',
+                  controller: _cidadeController,
+                  keyboardType: TextInputType.text,
+                  validator: InputValidators.validateCity,
+                  inputFormatters: [InputMasks.textOnly],
+                  prefixIcon: const Icon(Icons.location_city, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Estado field
+                CustomTextField(
+                  label: 'Estado',
+                  hint: 'Digite seu estado',
+                  controller: _estadoController,
+                  keyboardType: TextInputType.text,
+                  validator: InputValidators.validateState,
+                  inputFormatters: [InputMasks.stateMask],
+                  maxLength: 2,
+                  prefixIcon: const Icon(Icons.flag_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.lg),
                 

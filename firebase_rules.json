@@ -1,0 +1,53 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        ".validate": "newData.hasChildren(['nome', 'email', 'cpf', 'telefone', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'estado'])"
+      }
+    },
+    "groups": {
+      ".indexOn": ["creatorId", "groupCode"],
+      ".read": "auth != null",
+      "$groupId": {
+        ".write": "auth != null && (data.child('creatorId').val() === auth.uid || newData.child('creatorId').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['id', 'name', 'creatorId', 'groupCode'])",
+        "members": {
+          ".read": "auth != null",
+          ".write": "auth != null && data.parent().child('creatorId').val() === auth.uid"
+        },
+        "joinRequests": {
+          ".read": "auth != null",
+          "$requestId": {
+            ".write": "auth != null && ($requestId === auth.uid || data.parent().parent().child('creatorId').val() === auth.uid)"
+          }
+        }
+      }
+    },
+    "schedules": {
+      ".read": "auth != null",
+      "$groupId": {
+        ".read": "auth != null && (root.child('groups').child($groupId).child('creatorId').val() === auth.uid || root.child('groups').child($groupId).child('members').child(auth.uid).exists())",
+        "$userId": {
+          ".write": "auth != null && ($userId === auth.uid || root.child('groups').child($groupId).child('creatorId').val() === auth.uid)",
+          "$scheduleId": {
+            ".validate": "newData.hasChildren(['userId', 'groupId', 'groupName', 'dayOfWeek', 'going', 'returning'])"
+          }
+        }
+      }
+    },
+    "dailySchedules": {
+      ".read": "auth != null",
+      "$date": {
+        ".read": "auth != null",
+        "$groupId": {
+          ".read": "auth != null && (root.child('groups').child($groupId).child('creatorId').val() === auth.uid || root.child('groups').child($groupId).child('members').child(auth.uid).exists())",
+          "$userId": {
+            ".write": "auth != null && ($userId === auth.uid || root.child('groups').child($groupId).child('creatorId').val() === auth.uid)"
+          }
+        }
+      }
+    }
+  }
+} 

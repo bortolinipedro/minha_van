@@ -8,6 +8,8 @@ import 'package:minha_van/widgets/custom_text_field.dart';
 import 'package:minha_van/services/auth_service.dart';
 import 'package:minha_van/widgets/auth_status.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:minha_van/services/user_profile_service.dart';
+import 'package:minha_van/helpers/input_masks.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -20,6 +22,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _cpfController = TextEditingController();
+  final _telefoneController = TextEditingController();
+  final _cepController = TextEditingController();
+  final _ruaController = TextEditingController();
+  final _numeroController = TextEditingController();
+  final _bairroController = TextEditingController();
+  final _cidadeController = TextEditingController();
+  final _estadoController = TextEditingController();
   
   bool _isLoading = false;
   bool _isEditing = false;
@@ -36,14 +46,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _cpfController.dispose();
+    _telefoneController.dispose();
+    _cepController.dispose();
+    _ruaController.dispose();
+    _numeroController.dispose();
+    _bairroController.dispose();
+    _cidadeController.dispose();
+    _estadoController.dispose();
     super.dispose();
   }
 
-  void _loadUserData() {
+  void _loadUserData() async {
     final user = authService.value.currentUser;
     if (user != null) {
-      _nameController.text = user.displayName ?? '';
-      _emailController.text = user.email ?? '';
+      final profile = await UserProfileService.getUserProfile(user.uid);
+      _nameController.text = profile?['nome'] ?? user.displayName ?? '';
+      _emailController.text = profile?['email'] ?? user.email ?? '';
+      _cpfController.text = profile?['cpf'] ?? '';
+      _telefoneController.text = profile?['telefone'] ?? '';
+      _cepController.text = profile?['cep'] ?? '';
+      _ruaController.text = profile?['rua'] ?? '';
+      _numeroController.text = profile?['numero'] ?? '';
+      _bairroController.text = profile?['bairro'] ?? '';
+      _cidadeController.text = profile?['cidade'] ?? '';
+      _estadoController.text = profile?['estado'] ?? '';
+    }
+  }
+
+  Future<void> _onCepChanged(String value) async {
+    final cleanCep = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (cleanCep.length >= 8) {
+      final address = await UserProfileService.fetchAddressFromCep(cleanCep);
+      if (address != null) {
+        setState(() {
+          _ruaController.text = address['rua'] ?? '';
+          _bairroController.text = address['bairro'] ?? '';
+          _cidadeController.text = address['cidade'] ?? '';
+          _estadoController.text = address['estado'] ?? '';
+        });
+      }
     }
   }
 
@@ -55,6 +97,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _errorMessage = null;
       _successMessage = null;
     });
+
+    final user = authService.value.currentUser;
+    if (user != null) {
+      await UserProfileService.createOrUpdateUserProfile(
+        uid: user.uid,
+        data: {
+          'nome': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'cpf': _cpfController.text.trim(),
+          'telefone': _telefoneController.text.trim(),
+          'cep': _cepController.text.trim(),
+          'rua': _ruaController.text.trim(),
+          'numero': _numeroController.text.trim(),
+          'bairro': _bairroController.text.trim(),
+          'cidade': _cidadeController.text.trim(),
+          'estado': _estadoController.text.trim(),
+        },
+      );
+    }
 
     final result = await authService.value.updateDisplayName(_nameController.text.trim());
 
@@ -223,15 +284,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: _nameController,
                   keyboardType: TextInputType.name,
                   enabled: _isEditing,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nome é obrigatório';
-                    }
-                    if (value.trim().length < 2) {
-                      return 'Nome deve ter pelo menos 2 caracteres';
-                    }
-                    return null;
-                  },
+                  validator: InputValidators.validateName,
+                  inputFormatters: [InputMasks.textOnly],
                   prefixIcon: const Icon(Icons.person_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.md),
@@ -244,6 +298,114 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   keyboardType: TextInputType.emailAddress,
                   enabled: false, // Email não pode ser editado
                   prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // CPF field
+                CustomTextField(
+                  label: 'CPF',
+                  hint: 'Digite seu CPF',
+                  controller: _cpfController,
+                  keyboardType: TextInputType.number,
+                  enabled: _isEditing,
+                  validator: InputValidators.validateCpf,
+                  formatter: InputFormatters.formatCpf,
+                  inputFormatters: [InputMasks.cpfMask],
+                  prefixIcon: const Icon(Icons.badge_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Telefone field
+                CustomTextField(
+                  label: 'Telefone',
+                  hint: 'Digite seu telefone',
+                  controller: _telefoneController,
+                  keyboardType: TextInputType.phone,
+                  enabled: _isEditing,
+                  validator: InputValidators.validatePhone,
+                  formatter: InputFormatters.formatPhone,
+                  inputFormatters: [InputMasks.phoneMask],
+                  prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // CEP field
+                CustomTextField(
+                  label: 'CEP',
+                  hint: 'Digite seu CEP',
+                  controller: _cepController,
+                  keyboardType: TextInputType.number,
+                  enabled: _isEditing,
+                  validator: InputValidators.validateCep,
+                  formatter: InputFormatters.formatCep,
+                  inputFormatters: [InputMasks.cepMask],
+                  onChanged: _isEditing ? _onCepChanged : null,
+                  prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Rua field
+                CustomTextField(
+                  label: 'Rua',
+                  hint: 'Digite sua rua',
+                  controller: _ruaController,
+                  keyboardType: TextInputType.text,
+                  enabled: _isEditing,
+                  validator: InputValidators.validateStreet,
+                  inputFormatters: [InputMasks.textOnly],
+                  prefixIcon: const Icon(Icons.home_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Número field
+                CustomTextField(
+                  label: 'Número',
+                  hint: 'Digite o número',
+                  controller: _numeroController,
+                  keyboardType: TextInputType.text,
+                  enabled: _isEditing,
+                  validator: InputValidators.validateNumber,
+                  prefixIcon: const Icon(Icons.confirmation_number_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Bairro field
+                CustomTextField(
+                  label: 'Bairro',
+                  hint: 'Digite seu bairro',
+                  controller: _bairroController,
+                  keyboardType: TextInputType.text,
+                  enabled: _isEditing,
+                  validator: InputValidators.validateNeighborhood,
+                  inputFormatters: [InputMasks.textOnly],
+                  prefixIcon: const Icon(Icons.location_city_outlined, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Cidade field
+                CustomTextField(
+                  label: 'Cidade',
+                  hint: 'Digite sua cidade',
+                  controller: _cidadeController,
+                  keyboardType: TextInputType.text,
+                  enabled: _isEditing,
+                  validator: InputValidators.validateCity,
+                  inputFormatters: [InputMasks.textOnly],
+                  prefixIcon: const Icon(Icons.location_city, color: AppColors.textSecondary),
+                ),
+                SizedBox(height: AppSpacing.md),
+                
+                // Estado field
+                CustomTextField(
+                  label: 'Estado',
+                  hint: 'Digite seu estado',
+                  controller: _estadoController,
+                  keyboardType: TextInputType.text,
+                  enabled: _isEditing,
+                  validator: InputValidators.validateState,
+                  inputFormatters: [InputMasks.stateMask],
+                  maxLength: 2,
+                  prefixIcon: const Icon(Icons.flag_outlined, color: AppColors.textSecondary),
                 ),
                 SizedBox(height: AppSpacing.lg),
                 
