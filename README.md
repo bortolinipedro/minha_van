@@ -73,20 +73,6 @@ O `.gitignore` já está configurado para ignorar:
    flutter run
    ```
 ---
-```text
-minha_van_v2/
-├── lib/                      📁 Código principal do app
-│   ├── main.dart            📄 Ponto de entrada principal 🧠
-│   ├── screens/             📁 Telas da aplicação 🖥️
-│   ├── widgets/             📁 Componentes reutilizáveis 🧩
-│   ├── constants/           📁 Cores, espaçamentos, estilos 🎨
-│   ├── helpers/             📁 SQLHelper e utilitários 🛠️
-│   └── services/            📁 (Futuro) Serviços de back-end 🔌
-├── assets/                  📁 Imagens, ícones e fontes 🖼️
-├── pubspec.yaml             📄 Dependências e configs do Flutter 📦
-└── README.md                📄 Documentação principal 📘
-```
----
 
 ## 📱 Funcionalidades
 
