@@ -8,8 +8,7 @@ Aplicativo de gerenciamento de vans para motoristas e passageiros.
 O **Minha Van** é um app multiplataforma feito em Flutter que permite:
 
 - Motoristas gerenciarem grupos de passageiros.
-- Passageiros visualizarem horários, confirmarem presença e se associarem a grupos.
-- Navegação fluida e interface moderna, responsiva e fiel ao design no Figma.
+- Passageiros visualizarem horários e se associarem a grupos.
 
 ---
 
@@ -19,9 +18,7 @@ O **Minha Van** é um app multiplataforma feito em Flutter que permite:
 - **Eron Arthur da Silva**
 - **Bruno Carlos**
 
-
 ---
-
 
 ## 🔐 Configuração de Segurança
 
