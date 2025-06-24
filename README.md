@@ -2,6 +2,27 @@
 
 Aplicativo de gerenciamento de vans para motoristas e passageiros.
 
+
+## 📱 Visão Geral
+
+O **Minha Van** é um app multiplataforma feito em Flutter que permite:
+
+- Motoristas gerenciarem grupos de passageiros.
+- Passageiros visualizarem horários, confirmarem presença e se associarem a grupos.
+- Navegação fluida e interface moderna, responsiva e fiel ao design no Figma.
+
+---
+
+## 👨‍💻 Autores
+
+- **Pedro Augusto Macari**
+- **Eron Arthur da Silva**
+- **Bruno Carlos**
+
+
+---
+
+
 ## 🔐 Configuração de Segurança
 
 ### ⚠️ IMPORTANTE: Chaves do Firebase
@@ -54,6 +75,21 @@ O `.gitignore` já está configurado para ignorar:
    ```bash
    flutter run
    ```
+---
+📁 **minha_van_v2/**
+├── 📁 **lib/**
+│   ├── 📄 `main.dart` — 🧠 Ponto de entrada principal do aplicativo
+│   ├── 📁 `screens/` — 🖥️ Telas da aplicação (cadastro, login, home, perfil etc.)
+│   ├── 📁 `widgets/` — 🧩 Componentes reutilizáveis (botões, appbar, etc.)
+│   ├── 📁 `constants/` — 🎨 Definições de cores, espaçamentos e estilos de texto
+│   ├── 📁 `helpers/` — 🛠️ Utilitários diversos e o `SQLHelper` (banco local)
+│   └── 📁 `services/` — 🔌 Serviços (futuros) de autenticação/back-end
+├── 📁 **assets/** — 🖼️ Imagens, ícones e fontes utilizadas no app
+├── 📄 **pubspec.yaml** — 📦 Gerenciador de dependências e configurações do Flutter
+└── 📄 **README.md** — 📘 Documentação principal do projeto
+
+
+---
 
 ## 📱 Funcionalidades
 
