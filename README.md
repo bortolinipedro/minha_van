@@ -15,7 +15,7 @@ O **Minha Van** é um app multiplataforma feito em Flutter que permite:
 
 ## 👨‍💻 Autores
 
-- **Pedro Augusto Macari**
+- **Pedro Bortolini**
 - **Eron Arthur da Silva**
 - **Bruno Carlos**
 
